@@ -1,49 +1,44 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiX } from "react-icons/hi";
+import { workshopImages } from "../data/images";
 
 const galleryImages = [
   {
     id: 1,
-    image:
-      "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=1200&auto=format&fit=crop",
+    image: workshopImages.collageKids,
     title: "Collage Art Workshop",
     category: "Collage",
   },
   {
     id: 2,
-    image:
-      "https://images.unsplash.com/photo-1511988617509-a57c8a288659?q=80&w=1200&auto=format&fit=crop",
+    image: workshopImages.cups,
     title: "Painting Therapy Session",
-    category: "Painting",
+    category: "Vitray Art on Cups",
   },
   {
     id: 3,
-    image:
-      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop",
-    title: "Creative Journaling",
-    category: "Journaling",
+    image: workshopImages.participants,
+    title: "Creative Participants",
+    category: "Vitray Workshop",
   },
   {
     id: 4,
-    image:
-      "https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=1200&auto=format&fit=crop",
+    image: workshopImages.angela,
     title: "Kids Creative Day",
     category: "Kids",
   },
   {
     id: 5,
-    image:
-      "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?q=80&w=1200&auto=format&fit=crop",
-    title: "Mindful Drawing Workshop",
-    category: "Mindfulness",
+    image: workshopImages.preparation,
+    title: "Workshop Preparation",
+    category: "Carving Workshop",
   },
   {
     id: 6,
-    image:
-      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=1200&auto=format&fit=crop",
-    title: "Art & Community",
-    category: "Workshop",
+    image: workshopImages.results,
+    title: "Creative Results",
+    category: "Carving",
   },
 ];
 

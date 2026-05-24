@@ -13,7 +13,7 @@ export const workshopImages = {
     "src/assets/carvingGypsum.png",
   collageKids:
   "src/assets/collageKids.jpeg",
-  angela:  
+  angela:
   "src/assets/angela.jpeg",
   cups:
   "src/assets/cups.jpeg",
@@ -23,6 +23,12 @@ export const workshopImages = {
   "src/assets/founders.jpeg",
   kids:
     "src/assets/kids.jpeg",
+  preparation:
+    "src/assets/preparation.jpeg",
+  participants:
+    "src/assets/participants.jpeg",
+  results:
+    "src/assets/results.jpeg",
   mindfulDrawing:
     "https://images.unsplash.com/photo-1511854005000-f27912f66ade?q=80&w=1200&auto=format&fit=crop",
   mixedMedia:
