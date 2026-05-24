@@ -23,6 +23,22 @@
     background: var(--color-cream);
     color: var(--color-neutral-800);
   }
+
+  input[type="date"],
+  input[type="datetime-local"],
+  input[type="time"] {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    margin-left: 0;
+    padding: 0;
+  }
 }
 
 @layer components {

@@ -7,14 +7,14 @@ const contactMethods = [
   {
     icon: FiMail,
     label: "Email",
-    value: "hello@creativedetox.com",
-    href: "mailto:hello@creativedetox.com",
+    value: "creativedetox@gmail.com",
+    href: "mailto:creativedetox@gmail.com",
   },
   {
     icon: FiInstagram,
     label: "Instagram",
-    value: "@creativedetox",
-    href: "https://instagram.com",
+    value: "@creative.detox.art",
+    href: "https://www.instagram.com/creative.detox.art?igsh=MWp6Nno0ZW9heWFjZg%3D%3D&utm_source=qr",
   },
   {
     icon: FiPhone,

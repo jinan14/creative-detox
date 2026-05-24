@@ -4,7 +4,7 @@ import { workshops } from "../data/workshops";
 import { FiCheck, FiUser, FiMail, FiPhone, FiCalendar, FiMessageSquare } from "react-icons/fi";
 
 const inputClass =
-  "w-full px-4 py-3 rounded-2xl border border-neutral-200 bg-white font-body text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition-all duration-200";
+  "w-full min-w-0 max-w-full px-4 py-3 rounded-2xl border border-neutral-200 bg-white font-body text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition-all duration-200";
 
 export default function RegistrationForm() {
   const [form, setForm] = useState({
