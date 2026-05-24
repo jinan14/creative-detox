@@ -1,3 +1,5 @@
+import { participantImages, workshopImages } from "./images";
+
 export const workshops = [
   {
     id: 1,
@@ -7,7 +9,7 @@ export const workshops = [
     duration: "3 hours",
     difficulty: "Beginner",
     date: "June 14, 2025",
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80",
+    image: workshopImages.collage,
     spots: 12,
   },
   {
@@ -18,7 +20,7 @@ export const workshops = [
     duration: "4 hours",
     difficulty: "All Levels",
     date: "June 21, 2025",
-    image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?w=600&q=80",
+    image: workshopImages.painting,
     spots: 8,
   },
   {
@@ -29,7 +31,7 @@ export const workshops = [
     duration: "2.5 hours",
     difficulty: "Beginner",
     date: "June 28, 2025",
-    image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&q=80",
+    image: workshopImages.journaling,
     spots: 15,
   },
   {
@@ -40,7 +42,7 @@ export const workshops = [
     duration: "2 hours",
     difficulty: "Kids (6–12)",
     date: "July 5, 2025",
-    image: "https://images.unsplash.com/photo-1560969184-10fe8719e047?w=600&q=80",
+    image: workshopImages.kids,
     spots: 20,
   },
   {
@@ -51,7 +53,7 @@ export const workshops = [
     duration: "2 hours",
     difficulty: "All Levels",
     date: "July 12, 2025",
-    image: "https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=600&q=80",
+    image: workshopImages.mindfulDrawing,
     spots: 10,
   },
   {
@@ -62,7 +64,7 @@ export const workshops = [
     duration: "3.5 hours",
     difficulty: "Intermediate",
     date: "July 19, 2025",
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
+    image: workshopImages.mixedMedia,
     spots: 10,
   },
 ];
@@ -74,56 +76,56 @@ export const featuredWorkshops = workshops.slice(0, 4);
 export const galleryImages = [
   {
     id: 1,
-    src: "https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?w=600&q=80",
+    src: workshopImages.collage,
     alt: "Collage art workshop",
     category: "Workshop",
     span: "row-span-2",
   },
   {
     id: 2,
-    src: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=600&q=80",
+    src: workshopImages.painting,
     alt: "Painting session",
     category: "Art",
     span: "",
   },
   {
     id: 3,
-    src: "https://images.unsplash.com/photo-1605721911519-3dfeb3be25e7?w=600&q=80",
+    src: workshopImages.journaling,
     alt: "Art journaling",
     category: "Journaling",
     span: "",
   },
   {
     id: 4,
-    src: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=600&q=80",
+    src: workshopImages.kids,
     alt: "Kids workshop",
     category: "Kids",
     span: "col-span-2",
   },
   {
     id: 5,
-    src: "https://images.unsplash.com/photo-1578926375605-eaf7559b1458?w=600&q=80",
+    src: workshopImages.heroWorkshop,
     alt: "Community creative session",
     category: "Community",
     span: "",
   },
   {
     id: 6,
-    src: "https://images.unsplash.com/photo-1541512416146-3cf58d6b27cc?w=600&q=80",
+    src: workshopImages.mixedMedia,
     alt: "Mixed media art",
     category: "Art",
     span: "row-span-2",
   },
   {
     id: 7,
-    src: "https://images.unsplash.com/photo-1515405295579-ba7b45403062?w=600&q=80",
+    src: workshopImages.mindfulDrawing,
     alt: "Mindful drawing",
     category: "Mindfulness",
     span: "",
   },
   {
     id: 8,
-    src: "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=600&q=80",
+    src: workshopImages.paintTable,
     alt: "Creative process",
     category: "Behind The Scenes",
     span: "",
@@ -137,7 +139,7 @@ export const testimonials = [
     role: "Collage Workshop Participant",
     text: "I came in feeling burnt out and left feeling genuinely lighter. The collage session was more therapeutic than I expected. I've already signed up for the next one.",
     rating: 5,
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80",
+    avatar: participantImages.artist,
   },
   {
     id: 2,
@@ -145,7 +147,7 @@ export const testimonials = [
     role: "Painting Therapy Participant",
     text: "No judgment, no pressure — just you and a canvas. The instructor made everyone feel capable regardless of skill. Exactly what I needed after a tough month.",
     rating: 5,
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80",
+    avatar: participantImages.painter,
   },
   {
     id: 3,
@@ -153,7 +155,7 @@ export const testimonials = [
     role: "Kids Creative Day Parent",
     text: "My daughter hasn't stopped talking about it. She came home with the biggest smile and a piece of art she's now hung on her wall. We'll be back every month.",
     rating: 5,
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80",
+    avatar: participantImages.creative,
   },
 ];
 
