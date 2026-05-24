@@ -35,6 +35,15 @@ export const workshopImages = {
 
   journaling:
     "https://images.unsplash.com/photo-1758521232721-da2be69f0b64?q=80&w=1200&auto=format&fit=crop",
+  
+  mindfulDrawing: 
+    "https://images.unsplash.com/photo-1511854005000-f27912f66ade?q=80&w=1200&auto=format&fit=crop",
+  
+  watercolor: 
+    "https://images.unsplash.com/photo-1777537953461-744f35dcb1de?q=80&w=1200&auto=format&fit=crop",
+
+  paintTable: 
+    "https://images.unsplash.com/photo-1707000414103-c7c65b336e95?q=80&w=1200&auto=format&fit=crop",
 };
 
 export const participantImages = {

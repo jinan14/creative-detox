@@ -5,7 +5,7 @@
 [![React](https://img.shields.io/badge/React-18+-61DAFB?style=flat&logo=react&logoColor=white)](https://react.dev)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3+-06B6D4?style=flat&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![Vite](https://img.shields.io/badge/Vite-5+-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel)](https://creative-detox.vercel.app)
 
 **A modern React web application promoting creativity, mindfulness, and emotional wellness through artistic workshops and community engagement.**
 
@@ -100,8 +100,8 @@ Creative Detox is a responsive, feature-rich platform that allows users to explo
 
 Before getting started, ensure you have the following installed:
 
-- **Node.js** v16+ ([Download](https://nodejs.org/))
-- **npm** v7+ (comes with Node.js)
+- **Node.js** v18+ ([Download](https://nodejs.org/))
+- **npm** v9+ (comes with Node.js)
 - **Git** ([Download](https://git-scm.com/))
 
 ---
