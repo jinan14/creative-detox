@@ -34,7 +34,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-4 mt-6">
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/creative.detox.art?igsh=MWp6Nno0ZW9heWFjZg%3D%3D&utm_source=qr"
                 target="_blank"
                 rel="noreferrer"
                 className="w-10 h-10 rounded-full bg-neutral-800 hover:bg-berry transition-colors flex items-center justify-center group"
@@ -42,7 +42,7 @@ export default function Footer() {
                 <FiInstagram size={16} className="text-neutral-400 group-hover:text-white transition-colors" />
               </a>
               <a
-                href="mailto:hello@creativedetox.com"
+                href="mailto:creativedetox@gmail.com"
                 className="w-10 h-10 rounded-full bg-neutral-800 hover:bg-berry transition-colors flex items-center justify-center group"
               >
                 <FiMail size={16} className="text-neutral-400 group-hover:text-white transition-colors" />
@@ -73,14 +73,14 @@ export default function Footer() {
             <ul className="flex flex-col gap-4">
               <li className="flex items-start gap-3">
                 <FiMail size={16} className="text-berry mt-0.5 flex-shrink-0" />
-                <a href="mailto:hello@creativedetox.com" className="font-body text-sm text-neutral-400 hover:text-white transition-colors">
-                  hello@creativedetox.com
+                <a href="mailto:creativedetox@gmail.com" className="font-body text-sm text-neutral-400 hover:text-white transition-colors">
+                  creativedetox@gmail.com
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <FiInstagram size={16} className="text-berry mt-0.5 flex-shrink-0" />
-                <a href="https://instagram.com" target="_blank" rel="noreferrer" className="font-body text-sm text-neutral-400 hover:text-white transition-colors">
-                  @creativedetox
+                <a href="https://www.instagram.com/creative.detox.art?igsh=MWp6Nno0ZW9heWFjZg%3D%3D&utm_source=qr" target="_blank" rel="noreferrer" className="font-body text-sm text-neutral-400 hover:text-white transition-colors">
+                  @creative.detox.art
                 </a>
               </li>
               <li className="flex items-start gap-3">
