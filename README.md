@@ -186,6 +186,30 @@ creative-detox/
 
 ---
 
+## 📸 Screenshots
+
+### Home
+
+![Creative Detox Home page](src/assets/Home.png)
+
+### About
+
+![Creative Detox About page](src/assets/About.png)
+
+### Workshops
+
+![Creative Detox Workshops page](src/assets/workshop.png)
+
+### Gallery
+
+![Creative Detox Gallery page](src/assets/Gallery.png)
+
+### Contact
+
+![Creative Detox Contact page](src/assets/Contacts.png)
+
+---
+
 ## 🌐 Deployment
 
 The project is deployed on Vercel and can be accessed at:
