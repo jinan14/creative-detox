@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import WorkshopCard from "../components/WorkshopCard";
 import TestimonialCard from "../components/TestimonialCard";
 import CTASection from "../components/CTASection";
+import { participantImages, workshopImages } from "../data/images";
 
 import {
   HiOutlineHeart,
@@ -18,24 +19,21 @@ const featuredWorkshops = [
     description:
       "Express emotions and creativity through colorful collage compositions.",
     category: "Collage",
-    image:
-      "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=1200&auto=format&fit=crop",
+    image: workshopImages.collage,
   },
   {
     title: "Painting Therapy",
     description:
       "Relax and reconnect with yourself through mindful painting sessions.",
     category: "Painting",
-    image:
-      "https://images.unsplash.com/photo-1511988617509-a57c8a288659?q=80&w=1200&auto=format&fit=crop",
+    image: workshopImages.painting,
   },
   {
     title: "Kids Creative Sessions",
     description:
       "Fun artistic workshops designed to inspire creativity in children.",
     category: "Kids",
-    image:
-      "https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=1200&auto=format&fit=crop",
+    image: workshopImages.kids,
   },
 ];
 
@@ -66,24 +64,21 @@ const testimonials = [
   {
     name: "Sarah K.",
     role: "Workshop Participant",
-    image:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=300&auto=format&fit=crop",
+    image: participantImages.artist,
     review:
       "Creative Detox gave me a peaceful space to reconnect with myself through art.",
   },
   {
     name: "Maya L.",
     role: "Art Enthusiast",
-    image:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=300&auto=format&fit=crop",
+    image: participantImages.painter,
     review:
       "The workshops are inspiring, relaxing, and filled with positive energy.",
   },
   {
     name: "Nour A.",
     role: "Parent",
-    image:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=300&auto=format&fit=crop",
+    image: participantImages.creative,
     review:
       "My child loved the creative sessions and came home excited every time.",
   },
@@ -144,8 +139,8 @@ export default function Home() {
             <div className="absolute -top-6 -left-6 w-40 h-40 bg-berry/20 rounded-full blur-3xl"></div>
 
             <img
-              src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=1200&auto=format&fit=crop"
-              alt="Creative Workshop"
+              src={workshopImages.heroWorkshop}
+              alt="People painting together in a creative workshop"
               className="rounded-[2rem] shadow-soft relative z-10 w-full h-[600px] object-cover"
             />
           </motion.div>

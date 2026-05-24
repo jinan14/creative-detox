@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { workshopImages } from "../data/images";
 
 const values = [
   {
@@ -90,8 +91,8 @@ export default function About() {
             viewport={{ once: true }}
           >
             <img
-              src="https://images.unsplash.com/photo-1511988617509-a57c8a288659?q=80&w=1200&auto=format&fit=crop"
-              alt="Creative Workshop"
+              src={workshopImages.heroWorkshop}
+              alt="People painting together in a creative workshop"
               className="rounded-[2rem] shadow-soft w-full h-[500px] object-cover"
             />
           </motion.div>
@@ -216,8 +217,8 @@ export default function About() {
             viewport={{ once: true }}
           >
             <img
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1200&auto=format&fit=crop"
-              alt="Founder"
+              src={workshopImages.founders}
+              alt="Artist sketching quietly in a mindful creative space"
               className="rounded-[2rem] shadow-soft w-full h-[500px] object-cover"
             />
           </motion.div>
@@ -230,7 +231,7 @@ export default function About() {
             viewport={{ once: true }}
           >
             <p className="text-berry font-medium mb-4">
-              Meet The Founder
+              Meet The Founders
             </p>
 
             <h2 className="text-4xl md:text-5xl font-display font-bold text-teal mb-6">

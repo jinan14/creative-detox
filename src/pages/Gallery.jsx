@@ -1,22 +1,20 @@
 import { motion } from "framer-motion";
 
 import GalleryGrid from "../components/GalleryGrid";
+import { workshopImages } from "../data/images";
 
 const behindScenes = [
   {
     title: "Workshop Preparation",
-    image:
-      "https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=1200&auto=format&fit=crop",
+    image: workshopImages.artStudio,
   },
   {
     title: "Creative Setup",
-    image:
-      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=1200&auto=format&fit=crop",
+    image: workshopImages.paintTable,
   },
   {
     title: "Art Materials",
-    image:
-      "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=1200&auto=format&fit=crop",
+    image: workshopImages.watercolor,
   },
 ];
 
