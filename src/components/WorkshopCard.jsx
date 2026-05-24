@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const categoryColors = {
   Painting: "bg-teal/10 text-teal",
   Collage: "bg-berry/10 text-berry",
-  Journaling: "bg-sage/10 text-sage-dark",
+  Carving: "bg-sage/10 text-sage-dark",
   Kids: "bg-rose-muted/20 text-rose-muted",
   Mindfulness: "bg-teal/10 text-teal-dark",
 };

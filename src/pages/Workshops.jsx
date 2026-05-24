@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 
 import WorkshopCard from "../components/WorkshopCard";
 import RegistrationForm from "../components/RegistrationForm";
+import { workshopImages } from "../data/images";
 
 const workshops = [
   {
@@ -13,8 +14,7 @@ const workshops = [
     duration: "2 Hours",
     level: "Beginner",
     date: "June 12, 2026",
-    image:
-      "https://images.unsplash.com/photo-1513364776144-60967b0f800f?q=80&w=1200&auto=format&fit=crop",
+    image: workshopImages.collage,
   },
   {
     title: "Acrylic Painting Session",
@@ -24,19 +24,17 @@ const workshops = [
     duration: "3 Hours",
     level: "All Levels",
     date: "June 18, 2026",
-    image:
-      "https://images.unsplash.com/photo-1511988617509-a57c8a288659?q=80&w=1200&auto=format&fit=crop",
+    image: workshopImages.painting,
   },
   {
-    title: "Art Journaling Workshop",
+    title: "Carving on Gypsum",
     description:
-      "Combine writing, sketches, and creativity in therapeutic journaling sessions.",
-    category: "Journaling",
-    duration: "2 Hours",
-    level: "Beginner",
+      "Learn hand-carving techniques on gypsum blocks to create textured reliefs and small sculptures.",
+    category: "Carving",
+    duration: "3 Hours",
+    level: "Intermediate",
     date: "June 21, 2026",
-    image:
-      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop",
+    image: workshopImages.gypsum,
   },
   {
     title: "Kids Creative Day",
@@ -46,8 +44,7 @@ const workshops = [
     duration: "4 Hours",
     level: "Kids",
     date: "June 25, 2026",
-    image:
-      "https://images.unsplash.com/photo-1516321497487-e288fb19713f?q=80&w=1200&auto=format&fit=crop",
+    image: workshopImages.kids,
   },
   {
     title: "Mindful Drawing Session",
@@ -57,19 +54,17 @@ const workshops = [
     duration: "2 Hours",
     level: "All Levels",
     date: "July 2, 2026",
-    image:
-      "https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?q=80&w=1200&auto=format&fit=crop",
+    image: workshopImages.mindfulDrawing,
   },
   {
-    title: "Mixed Media Exploration",
+    title: "Vitray Art Workshop",
     description:
-      "Experiment with different materials and artistic techniques creatively.",
+      "Discover the luminous craft of vitray by painting glass-inspired designs with translucent color and light.",
     category: "Painting",
     duration: "3 Hours",
     level: "Intermediate",
     date: "July 8, 2026",
-    image:
-      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=1200&auto=format&fit=crop",
+    image: workshopImages.vitray,
   },
 ];
 
@@ -77,7 +72,7 @@ const categories = [
   "All",
   "Painting",
   "Collage",
-  "Journaling",
+  "Carving",
   "Kids",
   "Mindfulness",
 ];
