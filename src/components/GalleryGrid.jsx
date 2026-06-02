@@ -2,45 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiX } from "react-icons/hi";
 import { workshopImages } from "../data/images";
-
-const galleryImages = [
-  {
-    id: 1,
-    image: workshopImages.collageKids,
-    title: "Collage Art Workshop",
-    category: "Collage",
-  },
-  {
-    id: 2,
-    image: workshopImages.cups,
-    title: "Painting Therapy Session",
-    category: "Vitray Art on Cups",
-  },
-  {
-    id: 3,
-    image: workshopImages.participants,
-    title: "Creative Participants",
-    category: "Vitray Workshop",
-  },
-  {
-    id: 4,
-    image: workshopImages.angela,
-    title: "Kids Creative Day",
-    category: "Kids",
-  },
-  {
-    id: 5,
-    image: workshopImages.preparation,
-    title: "Workshop Preparation",
-    category: "Carving Workshop",
-  },
-  {
-    id: 6,
-    image: workshopImages.results,
-    title: "Creative Results",
-    category: "Carving",
-  },
-];
+import { galleryImages } from "../data/images";
 
 export default function GalleryGrid() {
   const [selectedImage, setSelectedImage] = useState(null);
