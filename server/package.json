@@ -1,0 +1,27 @@
+{
+  "name": "creative-detox-server",
+  "version": "1.0.0",
+  "description": "Backend for Creative Detox",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed:artworks": "node seed/artworks.seed.js",
+    "seed:workshops": "node seed/workshops.seed.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.7.4",
+    "multer": "^2.2.0",
+    "openai": "^6.46.0"
+  }
+}
