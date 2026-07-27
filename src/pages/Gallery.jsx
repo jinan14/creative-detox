@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-import GalleryGrid from "../components/GalleryGrid";
+import ArtworkCard from "../components/ArtworkCard";
+import api from "../api/axios";
 import { workshopImages } from "../data/images";
 
 const behindScenes = [
@@ -19,6 +21,30 @@ const behindScenes = [
 ];
 
 export default function Gallery() {
+  const [artworks, setArtworks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    api
+      .get("/artworks")
+      .then(({ data }) => {
+        if (!cancelled) setArtworks(data);
+      })
+      .catch(() => {
+        if (!cancelled) setError("Couldn't load the gallery right now. Please try again later.");
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <main className="overflow-hidden">
       {/* Hero Section */}
@@ -54,8 +80,46 @@ export default function Gallery() {
         </div>
       </section>
 
-      {/* Gallery Grid */}
-      <GalleryGrid />
+      {/* Artwork Gallery */}
+      <section className="py-20 bg-cream">
+        <div className="max-w-7xl mx-auto px-6">
+          {/* Heading */}
+          <div className="text-center mb-14">
+            <p className="text-berry font-medium mb-3">Art Gallery</p>
+
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-teal mb-4">
+              Shop The Collection
+            </h2>
+
+            <p className="text-neutral-600 max-w-2xl mx-auto leading-relaxed">
+              Every piece is one-of-a-kind, created by our community of artists
+              and available to bring a little more calm into your space.
+            </p>
+          </div>
+
+          {loading && (
+            <p className="text-center text-neutral-500 font-body">Loading artworks...</p>
+          )}
+
+          {!loading && error && (
+            <p className="text-center text-berry font-body">{error}</p>
+          )}
+
+          {!loading && !error && artworks.length === 0 && (
+            <p className="text-center text-neutral-500 font-body">
+              No artworks available yet — check back soon.
+            </p>
+          )}
+
+          {!loading && !error && artworks.length > 0 && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {artworks.map((artwork, index) => (
+                <ArtworkCard key={artwork._id} artwork={artwork} index={index} />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* Behind The Scenes */}
       <section className="py-20 bg-white">

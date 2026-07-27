@@ -1,12 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 import WorkshopCard from "../components/WorkshopCard";
 import RegistrationForm from "../components/RegistrationForm";
-import { workshops, categories } from "../data/workshops";
+import api from "../api/axios";
 
 export default function Workshops() {
+  const [workshops, setWorkshops] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [activeCategory, setActiveCategory] = useState("All");
+
+  useEffect(() => {
+    let cancelled = false;
+
+    api
+      .get("/workshops")
+      .then(({ data }) => {
+        if (!cancelled) setWorkshops(data);
+      })
+      .catch(() => {
+        if (!cancelled) setError("Couldn't load workshops right now. Please try again later.");
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const categories = ["All", ...new Set(workshops.map((w) => w.category).filter(Boolean))];
 
   const filteredWorkshops =
     activeCategory === "All"
@@ -74,19 +99,35 @@ export default function Workshops() {
       {/* Workshop Grid */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredWorkshops.map((workshop, index) => (
-              <motion.div
-                key={index}
-                layout
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-              >
-                <WorkshopCard {...workshop} />
-              </motion.div>
-            ))}
-          </div>
+          {loading && (
+            <p className="text-center text-neutral-500 font-body">Loading workshops...</p>
+          )}
+
+          {!loading && error && (
+            <p className="text-center text-berry font-body">{error}</p>
+          )}
+
+          {!loading && !error && filteredWorkshops.length === 0 && (
+            <p className="text-center text-neutral-500 font-body">
+              No workshops available yet — check back soon.
+            </p>
+          )}
+
+          {!loading && !error && filteredWorkshops.length > 0 && (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredWorkshops.map((workshop) => (
+                <motion.div
+                  key={workshop._id}
+                  layout
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <WorkshopCard workshop={workshop} />
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -127,7 +168,7 @@ export default function Workshops() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <RegistrationForm />
+            <RegistrationForm workshops={workshops} />
           </motion.div>
         </div>
       </section>
