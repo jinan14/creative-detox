@@ -8,6 +8,14 @@ const categoryColors = {
   Carving: "bg-sage/10 text-sage-dark",
   Kids: "bg-rose-muted/20 text-rose-muted",
   Mindfulness: "bg-teal/10 text-teal-dark",
+  Vitray: "bg-berry/10 text-berry",
+};
+
+const formatDate = (date) => {
+  if (!date) return "Coming Soon";
+  const parsed = new Date(date);
+  if (Number.isNaN(parsed.getTime())) return date;
+  return parsed.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
 };
 
 export default function WorkshopCard({ workshop, index = 0, ...props }) {
@@ -18,14 +26,16 @@ export default function WorkshopCard({ workshop, index = 0, ...props }) {
     duration = "2 Hours",
     difficulty,
     level,
-    date = "Coming Soon",
+    date,
     image,
     spots,
+    seatsRemaining,
   } = workshop ?? props;
 
   const displayDifficulty = difficulty ?? level ?? "All Levels";
-  const spotsLeft = Number(spots);
+  const spotsLeft = Number(seatsRemaining ?? spots);
   const hasLimitedSpots = Number.isFinite(spotsLeft) && spotsLeft <= 5;
+  const displayDate = formatDate(date);
 
   return (
     <motion.div
@@ -69,7 +79,7 @@ export default function WorkshopCard({ workshop, index = 0, ...props }) {
           </div>
           <div className="flex items-center gap-1.5 text-neutral-400">
             <FiCalendar size={13} />
-            <span className="font-body text-xs">{date}</span>
+            <span className="font-body text-xs">{displayDate}</span>
           </div>
           <span className="ml-auto text-xs font-body text-sage-dark bg-sage/10 px-2.5 py-1 rounded-full">
             {displayDifficulty}

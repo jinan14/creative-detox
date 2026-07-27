@@ -1,12 +1,24 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { workshops } from "../data/workshops";
+import { useAuth } from "../context/AuthContext";
+import api from "../api/axios";
 import { FiCheck, FiUser, FiMail, FiPhone, FiCalendar, FiMessageSquare } from "react-icons/fi";
 
 const inputClass =
   "w-full min-w-0 max-w-full px-4 py-3 rounded-2xl border border-neutral-200 bg-white font-body text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition-all duration-200";
 
-export default function RegistrationForm() {
+const formatDate = (date) => {
+  if (!date) return "";
+  const parsed = new Date(date);
+  if (Number.isNaN(parsed.getTime())) return date;
+  return parsed.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+};
+
+export default function RegistrationForm({ workshops = [] }) {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -16,6 +28,7 @@ export default function RegistrationForm() {
     message: "",
   });
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const validate = () => {
@@ -32,15 +45,31 @@ export default function RegistrationForm() {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
       return;
     }
-    setSubmitted(true);
-    setForm({ name: "", email: "", phone: "", workshop: "", date: "", message: "" });
+
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await api.post("/registrations", { workshopId: form.workshop });
+      setSubmitted(true);
+      setForm({ name: "", email: "", phone: "", workshop: "", date: "", message: "" });
+    } catch (err) {
+      setErrors({
+        workshop: err.response?.data?.message || "Registration failed. Please try again.",
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -136,8 +165,9 @@ export default function RegistrationForm() {
           >
             <option value="">Select a Workshop</option>
             {workshops.map((w) => (
-              <option key={w.id} value={w.title}>
-                {w.title} — {w.date}
+              <option key={w._id} value={w._id} disabled={w.seatsRemaining <= 0}>
+                {w.title} — {formatDate(w.date)}
+                {w.seatsRemaining <= 0 ? " (Full)" : ""}
               </option>
             ))}
           </select>
@@ -156,8 +186,12 @@ export default function RegistrationForm() {
           />
         </div>
 
-        <button type="submit" className="btn-primary justify-center py-4 text-sm mt-1">
-          Register Now
+        <button
+          type="submit"
+          disabled={submitting}
+          className="btn-primary justify-center py-4 text-sm mt-1 disabled:opacity-60"
+        >
+          {submitting ? "Registering..." : "Register Now"}
         </button>
       </form>
     </div>

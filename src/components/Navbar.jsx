@@ -1,14 +1,18 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
+import { FiUser, FiShoppingBag } from "react-icons/fi";
 import logo from "../assets/logo.png";
+import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 
 const links = [
   { label: "Home", to: "/" },
   { label: "About", to: "/about" },
   { label: "Workshops", to: "/workshops" },
   { label: "Gallery", to: "/gallery" },
+  { label: "Gypsum", to: "/gypsum" },
   { label: "Contact", to: "/contact" },
 ];
 
@@ -19,7 +23,16 @@ export default function Navbar() {
     path: "/",
   });
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+  const { count } = useCart();
   const mobileOpen = mobileMenu.path === location.pathname && mobileMenu.open;
+
+  const handleLogout = () => {
+    logout();
+    closeMobileMenu();
+    navigate("/");
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -87,7 +100,40 @@ export default function Navbar() {
           </ul>
 
           {/* CTA */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-4">
+            {user ? (
+              <>
+                {user.role === "admin" && (
+                  <Link to="/admin" className="nav-link">
+                    Admin
+                  </Link>
+                )}
+                <Link to="/cart" className="relative nav-link" aria-label="Cart">
+                  <FiShoppingBag size={17} />
+                  {count > 0 && (
+                    <span className="absolute -top-2 -right-2.5 flex items-center justify-center w-4 h-4 rounded-full bg-berry text-white text-[10px] font-body font-semibold">
+                      {count}
+                    </span>
+                  )}
+                </Link>
+                <span className="flex items-center gap-1.5 text-sm text-neutral-700 font-body">
+                  <FiUser size={15} className="text-teal" />
+                  {user.name}
+                </span>
+                <button onClick={handleLogout} className="nav-link">
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="nav-link">
+                  Login
+                </Link>
+                <Link to="/register" className="nav-link">
+                  Register
+                </Link>
+              </>
+            )}
             <Link to="/workshops" className="btn-primary text-xs px-5 py-2.5">
               Book a Workshop
             </Link>
@@ -134,6 +180,58 @@ export default function Navbar() {
                 </motion.li>
               ))}
             </ul>
+
+            <div className="flex flex-col gap-4 mb-4">
+              {user ? (
+                <>
+                  <span className="flex items-center gap-2 text-neutral-700 font-body">
+                    <FiUser size={16} className="text-teal" />
+                    {user.name}
+                  </span>
+                  <Link
+                    to="/cart"
+                    onClick={closeMobileMenu}
+                    className="flex items-center gap-2 font-body text-neutral-700 hover:text-teal transition-colors"
+                  >
+                    <FiShoppingBag size={16} />
+                    Cart{count > 0 ? ` (${count})` : ""}
+                  </Link>
+                  {user.role === "admin" && (
+                    <Link
+                      to="/admin"
+                      onClick={closeMobileMenu}
+                      className="font-body text-neutral-700 hover:text-teal transition-colors"
+                    >
+                      Admin
+                    </Link>
+                  )}
+                  <button
+                    onClick={handleLogout}
+                    className="font-body text-neutral-700 hover:text-teal transition-colors text-left"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    onClick={closeMobileMenu}
+                    className="font-body text-neutral-700 hover:text-teal transition-colors"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    onClick={closeMobileMenu}
+                    className="font-body text-neutral-700 hover:text-teal transition-colors"
+                  >
+                    Register
+                  </Link>
+                </>
+              )}
+            </div>
+
             <Link
               to="/workshops"
               onClick={closeMobileMenu}
