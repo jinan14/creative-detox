@@ -10,6 +10,7 @@ import workshopRoutes from './routes/workshop.routes.js';
 import registrationRoutes from './routes/registration.routes.js';
 import gypsumRoutes from './routes/gypsum.routes.js';
 import uploadRoutes from './routes/upload.routes.js';
+import adminRoutes from './routes/admin.routes.js';
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use('/api/workshops', workshopRoutes);
 app.use('/api/registrations', registrationRoutes);
 app.use('/api/gypsum', gypsumRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/admin', adminRoutes);
 
 const PORT = process.env.PORT || 5050;
 

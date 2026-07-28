@@ -1,4 +1,5 @@
 import GypsumOrder from '../models/GypsumOrder.js';
+import { logAdminAction } from '../utils/adminLog.js';
 
 export const createGypsumOrder = async (req, res) => {
   try {
@@ -51,6 +52,14 @@ export const updateGypsumOrder = async (req, res) => {
     if (!order) {
       return res.status(404).json({ message: 'Gypsum order not found' });
     }
+
+    await logAdminAction({
+      adminId: req.user.id,
+      action: 'status_change',
+      entityType: 'GypsumOrder',
+      entityId: order._id,
+      description: `Updated gypsum order status to "${order.status}"`,
+    });
 
     res.json(order);
   } catch (err) {
