@@ -2,50 +2,65 @@
 
 <div align="center">
 
-[![React](https://img.shields.io/badge/React-18+-61DAFB?style=flat&logo=react&logoColor=white)](https://react.dev)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3+-06B6D4?style=flat&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![Vite](https://img.shields.io/badge/Vite-5+-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev)
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?logo=vercel)](https://creative-detox.vercel.app)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react&logoColor=white)](https://react.dev)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-06B6D4?style=flat&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev)
+[![Express](https://img.shields.io/badge/Express-5-000000?style=flat&logo=express&logoColor=white)](https://expressjs.com)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=flat&logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
 
-**A modern React web application promoting creativity, mindfulness, and emotional wellness through artistic workshops and community engagement.**
+**A full-stack MERN platform combining an art marketplace, workshop registration,
+custom gypsum orders, and an AI emotion-based workshop recommender.**
 
-[Live Demo](https://creative-detox.vercel.app) • [Features](#features) • [Tech Stack](#technologies-used) • [Getting Started](#installation--setup)
+[Features](#-features) • [Tech Stack](#%EF%B8%8F-technologies-used) • [Getting Started](#-installation--setup) • [Demo Script](#-demo-walkthrough)
 
 </div>
 
 ---
 
-Creative Detox is a responsive, feature-rich platform that allows users to explore artistic workshops, discover creative activities, view curated galleries, and register for upcoming sessions through an interactive and beautifully designed interface.
+Creative Detox is a senior project built as a full-stack platform where users browse
+and buy artwork, register for creative workshops, commission custom Arabic-calligraphy
+gypsum carvings, and get AI-matched to a workshop based on how they're feeling. Admins
+manage all of it — artworks, workshops, registrations, gypsum orders, and an audit log
+of every admin action — through a dedicated dashboard.
+
+**This project runs entirely on localhost.** There is no deployment, hosting, or CI/CD —
+the database is a cloud-hosted MongoDB Atlas cluster (so data is shared and always in
+sync), but both the frontend and backend are meant to be run locally by whoever is
+presenting.
 
 ---
 
 ## Table of Contents
 
-- [✨ Features](#features)
-- [🛠️ Technologies Used](#technologies-used)
-- [📄 Pages](#pages-included)
-- [📋 Prerequisites](#prerequisites)
-- [🚀 Installation & Setup](#installation--setup)
-- [📁 Folder Structure](#folder-structure)
-- [🌐 Deployment](#deployment)
-- [👤 Author](#author)
-- [📝 License](#license)
+- [✨ Features](#-features)
+- [🛠️ Technologies Used](#%EF%B8%8F-technologies-used)
+- [📋 Prerequisites](#-prerequisites)
+- [🚀 Installation & Setup](#-installation--setup)
+- [📁 Folder Structure](#-folder-structure)
+- [🔌 API Overview](#-api-overview)
+- [🎬 Demo Walkthrough](#-demo-walkthrough)
+- [👤 Author](#-author)
 
 ---
 
 ## ✨ Features
 
-- ⚡ **Multi-page React website** with smooth client-side navigation
-- 📱 **Responsive mobile-friendly design** optimized for all devices
-- 🎨 **Interactive workshop showcase** with dynamic filtering
-- 📝 **Workshop registration form** with validation
-- 🖼️ **Artistic gallery section** featuring creative work
-- ✨ **Smooth animations** using Framer Motion
-- 💬 **Contact form** with validation and real-time feedback
-- 🎯 **Modern UI/UX design** with intuitive navigation
-- 🔄 **React Router navigation** for seamless page transitions
-- 📊 **Statistics and testimonials** sections
-- 🤝 **Community engagement** features
+- 🔐 **Authentication & roles** — JWT-based register/login, bcrypt-hashed passwords,
+  route protection for both logged-in users and admin-only pages
+- 🖼️ **Artwork marketplace** — browse a real, database-backed gallery, view artwork
+  detail pages, add to a persistent (DB-backed, not localStorage) cart, and check out
+- 🎨 **Workshops & registration** — browse workshops by category, register with live
+  seat-count tracking (blocks over-capacity, prevents duplicate registration)
+- ✍️ **Custom gypsum orders** — request a hand-carved gypsum piece with Arabic
+  calligraphy, size, and color, tracked through a status pipeline (pending → in
+  production → completed)
+- 🤖 **AI workshop recommender** — describe how you're feeling (or pick an emotion),
+  and a single OpenAI call matches you to the most relevant current workshops
+- 🛠️ **Admin dashboard** — full CRUD for artworks and workshops (with real image
+  uploads via Multer, not pasted URLs), registration/gypsum management, and an
+  activity log auditing every admin action
+- 📱 **Responsive design** — mobile-first Tailwind layout across every page, carried
+  over from the original marketing site's teal/berry/cream visual system
 
 ---
 
@@ -53,177 +68,165 @@ Creative Detox is a responsive, feature-rich platform that allows users to explo
 
 | Category | Technologies |
 |----------|---------------|
-| **Frontend Framework** | React 18+, Vite |
-| **Styling** | Tailwind CSS 3+ |
-| **Routing** | React Router DOM v6+ |
-| **Animations** | Framer Motion |
-| **Icons** | React Icons |
-| **Version Control** | Git & GitHub |
-| **Deployment** | Vercel |
-
----
-
-## 📄 Pages Included
-
-### 🏠 Home
-- Hero section with engaging call-to-action
-- Featured workshops carousel
-- User testimonials section
-- Statistics showcase
-- Call-to-action banner
-
-### ℹ️ About
-- Platform story and mission
-- Vision & core values
-- Timeline section
-- Founder introduction
-
-### 🎨 Workshops
-- Workshop categories and filtering
-- Detailed workshop cards
-- Workshop registration form
-
-### 🖼️ Gallery
-- Creative artwork showcase
-- Event highlights
-- Behind-the-scenes content
-
-### 📞 Contact
-- Contact information
-- Social media links
-- Contact form with validation
-- FAQ section
+| **Frontend** | React 19, React Router 7, Tailwind CSS 4, Framer Motion, React Icons, Vite |
+| **Backend** | Node.js, Express 5, Mongoose |
+| **Database** | MongoDB Atlas (cloud-hosted, shared across dev machines) |
+| **Auth** | JWT + bcrypt |
+| **File Uploads** | Multer (admin artwork/workshop images) |
+| **AI** | OpenAI API (single-call emotion → workshop matching) |
 
 ---
 
 ## 📋 Prerequisites
 
-Before getting started, ensure you have the following installed:
-
-- **Node.js** v18+ ([Download](https://nodejs.org/))
-- **npm** v9+ (comes with Node.js)
-- **Git** ([Download](https://git-scm.com/))
+- **Node.js** v18+ and **npm** (keep the major version consistent across every machine
+  that runs this project)
+- **Git**
+- A **MongoDB Atlas** connection string (`mongodb+srv://...`) — this project uses a
+  shared cloud cluster, not a local MongoDB install
+- An **OpenAI API key** for the AI recommendation feature
 
 ---
 
 ## 🚀 Installation & Setup
 
-1. **Clone the repository:**
+This is a single repo with two apps: the Vite/React frontend at the root, and an
+Express backend in `server/`. Both need their own `npm install` and both need to be
+running at the same time.
+
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/jinan14/creative-detox.git
 cd creative-detox
 ```
 
-2. **Install dependencies:**
+### 2. Install frontend dependencies
 
 ```bash
 npm install
 ```
 
-3. **Start the development server:**
+### 3. Install backend dependencies
 
 ```bash
+cd server
+npm install
+cd ..
+```
+
+### 4. Configure environment variables
+
+**`server/.env`** (never committed — copy `server/.env.example` and fill in real values):
+
+```env
+MONGO_URI=mongodb+srv://<username>:<password>@<cluster-name>.mongodb.net/creative-detox?retryWrites=true&w=majority
+JWT_SECRET=<any long random string>
+OPENAI_API_KEY=<your OpenAI API key>
+PORT=5050
+```
+
+> Port `5050`, not `5000` — port 5000 conflicts with macOS Control Center's AirPlay
+> Receiver on Mac. Set this identically on every machine that runs the backend, since
+> `.env` is gitignored and never travels with `git pull`.
+
+**`.env`** at the repo root (optional — the frontend already falls back to this value
+if the file is missing):
+
+```env
+VITE_API_URL=http://localhost:5050/api
+```
+
+### 5. Run both apps (two terminals)
+
+```bash
+# Terminal 1 — backend
+cd server
 npm run dev
 ```
 
-The application will be available at `http://localhost:5173`
-
-4. **Build for production:**
-
 ```bash
-npm run build
+# Terminal 2 — frontend
+npm run dev
 ```
 
-5. **Preview production build:**
+- Backend: `http://localhost:5050` (health check at `/api/health`)
+- Frontend: `http://localhost:5173`
+
+### 6. (Optional) Seed sample data
 
 ```bash
-npm run preview
+cd server
+npm run seed:artworks
+npm run seed:workshops
+```
+
+### Other useful scripts
+
+```bash
+npm run build      # production build of the frontend (dist/)
+npm run preview    # preview the production build
+npm run lint        # ESLint across both src/ and server/
 ```
 
 ---
+
 ## 📁 Folder Structure
 
 ```
 creative-detox/
+├── src/                     # React frontend (Vite)
+│   ├── api/axios.js         # Axios instance, baseURL = VITE_API_URL
+│   ├── components/          # Shared components + admin/ subfolder
+│   ├── context/             # AuthContext (JWT/role), CartContext (DB-backed cart)
+│   ├── pages/                # Route-level pages + admin/ dashboard pages
+│   └── App.jsx               # Routes, providers
 │
-├── public/                 # Static assets
+├── server/                   # Express + MongoDB backend
+│   ├── config/db.js          # Mongoose/Atlas connection
+│   ├── models/                # User, Artwork, Workshop, Registration,
+│   │                          #   GypsumOrder, Cart, Order, AdminLog
+│   ├── routes/ + controllers/ # One pair per resource (see API Overview)
+│   ├── middleware/            # auth (JWT), admin (role check), upload (Multer)
+│   ├── uploads/                # Admin-uploaded images — committed to git,
+│   │                           #   served statically at /uploads
+│   └── seed/                   # Sample data scripts
 │
-├── src/
-│   ├── components/         # Reusable React components
-│   │   ├── Navbar.jsx
-│   │   ├── Footer.jsx
-│   │   ├── WorkshopCard.jsx
-│   │   ├── TestimonialCard.jsx
-│   │   ├── GalleryGrid.jsx
-│   │   ├── RegistrationForm.jsx
-│   │   ├── FAQ.jsx
-│   │   └── CTASection.jsx
-│   │
-│   ├── pages/              # Page components
-│   │   ├── Home.jsx
-│   │   ├── About.jsx
-│   │   ├── Workshops.jsx
-│   │   ├── Gallery.jsx
-│   │   └── Contact.jsx
-│   │
-│   ├── data/               # Static data
-│   │   └── workshops.js
-│   │
-│   ├── assets/             # Images and media files
-│   │
-│   ├── App.jsx             # Main App component
-│   ├── main.jsx            # React DOM render entry
-│   ├── App.css
-│   └── index.css           # Global styles
-│
-├── index.html              # HTML entry point
-├── package.json            # Project dependencies
-├── vite.config.js          # Vite configuration
-├── eslint.config.js        # ESLint rules
-└── README.md               # Project documentation
+├── docs/                      # Spec + 10-day build plan
+└── package.json                # Frontend
 ```
 
 ---
 
-## 📸 Screenshots
+## 🔌 API Overview
 
-### Home
-
-![Creative Detox Home page](src/assets/Home.png)
-
-### About
-
-![Creative Detox About page](src/assets/About.png)
-
-### Workshops
-
-![Creative Detox Workshops page](src/assets/workshop.png)
-
-### Gallery
-
-![Creative Detox Gallery page](src/assets/Gallery.png)
-
-### Contact
-
-![Creative Detox Contact page](src/assets/Contacts.png)
+| Method | Route | Auth | Purpose |
+|---|---|---|---|
+| POST | `/api/auth/register` \| `/login` | — | create account / get JWT |
+| GET | `/api/artworks` \| `/:id` | — | browse artworks |
+| POST/PUT/DELETE | `/api/artworks/:id` | admin | manage artworks |
+| GET | `/api/workshops` | — | browse workshops |
+| POST/PUT/DELETE | `/api/workshops/:id` | admin | manage workshops |
+| POST | `/api/registrations` | user | register for a workshop |
+| GET | `/api/registrations` | admin | list all, filterable by workshop |
+| POST | `/api/gypsum` | user | submit a custom gypsum order |
+| GET/PUT | `/api/gypsum` \| `/:id` | admin | manage orders / update status |
+| GET/POST/DELETE | `/api/cart`, `/cart/items` | user | DB-backed cart |
+| POST | `/api/orders` | user | place order from cart |
+| GET | `/api/admin/logs` | admin | admin action history |
+| POST | `/api/upload` | admin | upload an image (Multer) |
+| POST | `/api/ai/recommend` | user | emotion/text → matching workshops |
 
 ---
 
-## 🌐 Deployment
+## 🎬 Demo Walkthrough
 
-The project is deployed on Vercel and can be accessed at:
-
-🔗 **[https://creative-detox.vercel.app](https://creative-detox.vercel.app)**
-
-### Deployment Steps:
-
-1. Push your code to GitHub
-2. Connect your GitHub repository to Vercel
-3. Select the correct build settings:
-   - **Build Command:** `npm run build`
-   - **Output Directory:** `dist`
-4. Click "Deploy"
+A suggested presentation order lives in
+[`docs/Creative_Detox_10_Day_Plan.md`](docs/Creative_Detox_10_Day_Plan.md) and the demo
+script below — register/login → browse gallery → add to cart → checkout → browse
+workshops → register for one → submit a gypsum order → try the AI recommender → switch
+to an admin account and show artwork/workshop CRUD, registrations, gypsum status
+updates, and the activity log.
 
 ---
 
@@ -232,11 +235,7 @@ The project is deployed on Vercel and can be accessed at:
 **Jinan Ghannam**
 - GitHub: [@jinan14](https://github.com/jinan14)
 
----
-
-## 📝 License
-
-This project is developed for the **CSCI390 Web Programming** course project.
+Developed for the **CSCI490 Information System Development ISD** senior project.
 
 ---
 
@@ -244,6 +243,6 @@ This project is developed for the **CSCI390 Web Programming** course project.
 
 **Made with ❤️ for creative minds and artistic souls**
 
-[⬆ Back to top](#creative-detox--art-for-your-mental-escape)
+[⬆ Back to top](#-creative-detox--art-for-your-mental-escape)
 
 </div>
