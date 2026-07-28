@@ -1,21 +1,33 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FiImage, FiCalendar, FiArrowRight } from "react-icons/fi";
+import { FiImage, FiCalendar, FiUsers, FiBox, FiArrowRight } from "react-icons/fi";
 import api from "../../api/axios";
 
 export default function AdminOverview() {
-  const [counts, setCounts] = useState({ artworks: null, workshops: null });
+  const [counts, setCounts] = useState({
+    artworks: null,
+    workshops: null,
+    registrations: null,
+    gypsum: null,
+  });
 
   useEffect(() => {
     let cancelled = false;
 
-    Promise.all([api.get("/artworks"), api.get("/workshops")])
-      .then(([artworksRes, workshopsRes]) => {
+    Promise.all([
+      api.get("/artworks"),
+      api.get("/workshops"),
+      api.get("/registrations"),
+      api.get("/gypsum"),
+    ])
+      .then(([artworksRes, workshopsRes, registrationsRes, gypsumRes]) => {
         if (cancelled) return;
         setCounts({
           artworks: artworksRes.data.length,
           workshops: workshopsRes.data.length,
+          registrations: registrationsRes.data.length,
+          gypsum: gypsumRes.data.length,
         });
       })
       .catch(() => {});
@@ -37,6 +49,18 @@ export default function AdminOverview() {
       count: counts.workshops,
       to: "/admin/workshops",
       icon: FiCalendar,
+    },
+    {
+      label: "Registrations",
+      count: counts.registrations,
+      to: "/admin/registrations",
+      icon: FiUsers,
+    },
+    {
+      label: "Gypsum Orders",
+      count: counts.gypsum,
+      to: "/admin/gypsum",
+      icon: FiBox,
     },
   ];
 

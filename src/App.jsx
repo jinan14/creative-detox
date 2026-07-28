@@ -19,6 +19,9 @@ import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminOverview from './pages/admin/AdminOverview'
 import AdminArtworks from './pages/admin/AdminArtworks'
 import AdminWorkshops from './pages/admin/AdminWorkshops'
+import AdminRegistrations from './pages/admin/AdminRegistrations'
+import AdminGypsum from './pages/admin/AdminGypsum'
+import AdminActivityLog from './pages/admin/AdminActivityLog'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -66,6 +69,9 @@ function App() {
               <Route index element={<AdminOverview />} />
               <Route path="artworks" element={<AdminArtworks />} />
               <Route path="workshops" element={<AdminWorkshops />} />
+              <Route path="registrations" element={<AdminRegistrations />} />
+              <Route path="gypsum" element={<AdminGypsum />} />
+              <Route path="activity" element={<AdminActivityLog />} />
             </Route>
           </Routes>
           <Footer />
