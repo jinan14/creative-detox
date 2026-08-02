@@ -13,6 +13,7 @@ const links = [
   { label: "Workshops", to: "/workshops" },
   { label: "Gallery", to: "/gallery" },
   { label: "Gypsum", to: "/gypsum" },
+  { label: "Recommend", to: "/recommend" },
   { label: "Contact", to: "/contact" },
 ];
 

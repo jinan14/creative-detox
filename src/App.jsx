@@ -15,6 +15,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Cart from './pages/Cart'
 import Gypsum from './pages/Gypsum'
+import Recommend from './pages/Recommend'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminOverview from './pages/admin/AdminOverview'
 import AdminArtworks from './pages/admin/AdminArtworks'
@@ -50,6 +51,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/gypsum" element={<Gypsum />} />
+            <Route path="/recommend" element={<Recommend />} />
             <Route
               path="/cart"
               element={
