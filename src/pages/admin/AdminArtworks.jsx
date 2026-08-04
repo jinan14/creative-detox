@@ -4,6 +4,7 @@ import { FiPlus, FiX } from "react-icons/fi";
 import api from "../../api/axios";
 import ArtworkTable from "../../components/admin/ArtworkTable";
 import ImageUploadField from "../../components/admin/ImageUploadField";
+import GenerateDescriptionButton from "../../components/admin/GenerateDescriptionButton";
 
 const inputClass =
   "w-full min-w-0 max-w-full px-4 py-3 rounded-2xl border border-neutral-200 bg-white font-body text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition-all duration-200";
@@ -148,14 +149,21 @@ export default function AdminArtworks() {
               placeholder="Title"
               className={inputClass}
             />
-            <textarea
-              name="description"
-              value={form.description}
-              onChange={handleChange}
-              placeholder="Description"
-              rows={3}
-              className={`${inputClass} resize-none`}
-            />
+            <div className="flex flex-col gap-1.5">
+              <textarea
+                name="description"
+                value={form.description}
+                onChange={handleChange}
+                placeholder="Description"
+                rows={3}
+                className={`${inputClass} resize-none`}
+              />
+              <GenerateDescriptionButton
+                title={form.title}
+                type="artwork"
+                onGenerated={(description) => setForm((prev) => ({ ...prev, description }))}
+              />
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <input
                 name="artist"
