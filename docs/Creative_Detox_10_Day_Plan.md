@@ -33,11 +33,11 @@ creative-detox/
 │   │   ├── Home.jsx, About.jsx, Contact.jsx   ← keep, light edits
 │   │   ├── Gallery.jsx           ← EDIT: pulls artworks from API, adds cart buttons
 │   │   ├── Workshops.jsx         ← EDIT: pulls workshops from API
-│   │   ├── Login.jsx             ← NEW
-│   │   ├── Register.jsx          ← NEW
-│   │   ├── Cart.jsx              ← NEW
-│   │   ├── Gypsum.jsx            ← NEW
-│   │   ├── Recommend.jsx         ← NEW (AI emotion-based recommender)
+│   │   ├── Login.jsx             
+│   │   ├── Register.jsx          
+│   │   ├── Cart.jsx              
+│   │   ├── Gypsum.jsx            
+│   │   ├── Recommend.jsx          (AI emotion-based recommender)
 │   │   └── admin/
 │   │       ├── AdminDashboard.jsx
 │   │       ├── AdminArtworks.jsx
@@ -46,7 +46,7 @@ creative-detox/
 │   │       └── AdminGypsum.jsx
 │   │
 │   ├── context/                  ← NEW
-│   │   ├── AuthContext.jsx       (JWT + user role, persisted to localStorage)
+│   │   ├── AuthContext.jsx       (JWT + user role)
 │   │   └── CartContext.jsx       (cart state fetched/synced from `/api/cart`, no localStorage)
 │   │
 │   ├── data/                     ← DELETE once live API replaces static workshops.js
