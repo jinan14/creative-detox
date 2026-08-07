@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { FiTrash2, FiCheck, FiShoppingBag } from "react-icons/fi";
 import { useCart } from "../context/CartContext";
+import resolveImageUrl from "../utils/resolveImageUrl";
 
 export default function Cart() {
   const { items, loading, total, removeItem, checkout } = useCart();
@@ -81,7 +82,7 @@ export default function Cart() {
                 {items.map((item) => (
                   <div key={item._id} className="flex items-center gap-4 py-4 first:pt-0 last:pb-0">
                     <img
-                      src={item.image}
+                      src={resolveImageUrl(item.image)}
                       alt={item.title}
                       className="w-16 h-16 rounded-xl object-cover flex-shrink-0"
                     />

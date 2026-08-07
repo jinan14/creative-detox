@@ -36,7 +36,7 @@ export default function WorkshopTable({ workshops, onEdit, onDelete }) {
                 <div className="flex items-center gap-3">
                   {workshop.image ? (
                     <img
-                      src={workshop.image}
+                      src={resolveImageUrl(workshop.image)}
                       alt={workshop.title}
                       className="w-12 h-12 rounded-xl object-cover flex-shrink-0"
                     />

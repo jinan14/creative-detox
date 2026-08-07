@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { FiClock, FiCalendar, FiArrowRight } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import resolveImageUrl from "../utils/resolveImageUrl";
 
 const categoryColors = {
   Painting: "bg-teal/10 text-teal",
@@ -48,7 +49,7 @@ export default function WorkshopCard({ workshop, index = 0, ...props }) {
       {/* Image */}
       <div className="relative overflow-hidden h-52">
         <img
-          src={image}
+          src={resolveImageUrl(image)}
           alt={title}
           className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
         />

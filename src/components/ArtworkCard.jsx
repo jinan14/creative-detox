@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { FiCheck } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
+import resolveImageUrl from "../utils/resolveImageUrl";
 
 const categoryColors = {
   Painting: "bg-teal/10 text-teal",
@@ -52,7 +53,7 @@ export default function ArtworkCard({ artwork, index = 0 }) {
         {/* Image */}
         <div className="relative overflow-hidden h-96 bg-cream">
           <img
-            src={image}
+            src={resolveImageUrl(image)}
             alt={title}
             className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
           />

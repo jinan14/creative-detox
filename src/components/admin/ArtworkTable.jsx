@@ -1,4 +1,5 @@
 import { FiEdit2, FiTrash2, FiCheckCircle, FiXCircle } from "react-icons/fi";
+import resolveImageUrl from "../../utils/resolveImageUrl";
 
 export default function ArtworkTable({ artworks, onEdit, onDelete, onToggleAvailable }) {
   if (artworks.length === 0) {
@@ -28,7 +29,7 @@ export default function ArtworkTable({ artworks, onEdit, onDelete, onToggleAvail
               <td className="py-3 pr-4">
                 <div className="flex items-center gap-3">
                   <img
-                    src={artwork.image}
+                    src={resolveImageUrl(artwork.image)}
                     alt={artwork.title}
                     className="w-12 h-12 rounded-xl object-cover flex-shrink-0"
                   />

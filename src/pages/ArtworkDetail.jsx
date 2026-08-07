@@ -5,6 +5,7 @@ import { FiArrowLeft, FiCheck } from "react-icons/fi";
 import api from "../api/axios";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
+import resolveImageUrl from "../utils/resolveImageUrl";
 
 const categoryColors = {
   Painting: "bg-teal/10 text-teal",
@@ -93,7 +94,7 @@ export default function ArtworkDetail() {
               <div className="relative bg-white rounded-3xl shadow-card overflow-hidden">
                 <div className="relative bg-cream flex items-center justify-center min-h-[420px] md:min-h-[560px]">
                   <img
-                    src={artwork.image}
+                    src={resolveImageUrl(artwork.image)}
                     alt={artwork.title}
                     className="w-full h-full max-h-[70vh] object-contain"
                   />
