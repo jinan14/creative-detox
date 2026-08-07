@@ -22,6 +22,8 @@ const allowedOrigins = [
   process.env.FRONTEND_URL, // e.g. https://creative-detox.vercel.app
 ].filter(Boolean);
 
+console.log('CORS allowed origins:', JSON.stringify(allowedOrigins));
+
 app.use(
   cors({
     origin: allowedOrigins,
