@@ -9,6 +9,7 @@ import TestimonialCard from "../components/TestimonialCard";
 import CTASection from "../components/CTASection";
 import api from "../api/axios";
 import { participantImages, workshopImages } from "../data/images";
+import gypsumSample1 from "../assets/gypsumSample1.jpg";
 
 import {
   HiOutlineHeart,
@@ -266,6 +267,50 @@ export default function Home() {
           </div>
         </section>
       )}
+
+      {/* Custom Gypsum Carving */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="relative"
+          >
+            <div className="absolute -bottom-6 -right-6 w-40 h-40 bg-teal/20 rounded-full blur-3xl" />
+            <img
+              src={gypsumSample1}
+              alt="A custom hand-carved gypsum piece with Arabic calligraphy"
+              className="rounded-[2rem] shadow-soft relative z-10 w-full h-[420px] object-cover"
+            />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <p className="text-berry font-medium mb-4">Custom Gypsum Carvings</p>
+
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-teal mb-6">
+              Carve Your Own Arabic Piece
+            </h2>
+
+            <p className="text-neutral-600 leading-relaxed mb-8 max-w-xl">
+              Order a hand-carved gypsum piece featuring your name or a word
+              of your choosing in Arabic calligraphy, made to your preferred
+              size and color — a personal, lasting piece of art for your
+              space.
+            </p>
+
+            <Link to="/gypsum" className="btn-primary">
+              Customize Your Piece
+            </Link>
+          </motion.div>
+        </div>
+      </section>
 
       {/* Why Creative Detox */}
       <section className="py-20 bg-cream">
