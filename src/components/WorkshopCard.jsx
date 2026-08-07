@@ -21,6 +21,7 @@ const formatDate = (date) => {
 
 export default function WorkshopCard({ workshop, index = 0, ...props }) {
   const {
+    _id,
     title,
     description,
     category,
@@ -88,7 +89,7 @@ export default function WorkshopCard({ workshop, index = 0, ...props }) {
         </div>
 
         <Link
-          to="/workshops"
+          to={_id ? `/workshops/${_id}` : "/workshops"}
           className="flex items-center justify-between w-full px-4 py-3 bg-cream rounded-2xl text-teal font-body font-medium text-sm group/btn hover:bg-berry hover:text-white transition-all duration-300"
         >
           <span>Learn More</span>

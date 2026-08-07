@@ -115,6 +115,22 @@ export default function AdminArtworks() {
     }
   };
 
+  const handleMove = async (index, direction) => {
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= artworks.length) return;
+
+    const reordered = [...artworks];
+    [reordered[index], reordered[targetIndex]] = [reordered[targetIndex], reordered[index]];
+    setArtworks(reordered);
+
+    try {
+      await api.put("/artworks/reorder", { ids: reordered.map((a) => a._id) });
+    } catch {
+      setError("Failed to reorder artworks.");
+      loadArtworks();
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -224,6 +240,7 @@ export default function AdminArtworks() {
             onEdit={openEditForm}
             onDelete={handleDelete}
             onToggleAvailable={handleToggleAvailable}
+            onMove={handleMove}
           />
         )}
       </div>

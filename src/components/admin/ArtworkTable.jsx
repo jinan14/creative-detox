@@ -1,7 +1,7 @@
-import { FiEdit2, FiTrash2, FiCheckCircle, FiXCircle } from "react-icons/fi";
+import { FiEdit2, FiTrash2, FiCheckCircle, FiXCircle, FiChevronUp, FiChevronDown } from "react-icons/fi";
 import resolveImageUrl from "../../utils/resolveImageUrl";
 
-export default function ArtworkTable({ artworks, onEdit, onDelete, onToggleAvailable }) {
+export default function ArtworkTable({ artworks, onEdit, onDelete, onToggleAvailable, onMove }) {
   if (artworks.length === 0) {
     return (
       <p className="text-center text-neutral-500 font-body py-10">
@@ -24,10 +24,28 @@ export default function ArtworkTable({ artworks, onEdit, onDelete, onToggleAvail
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-100">
-          {artworks.map((artwork) => (
+          {artworks.map((artwork, index) => (
             <tr key={artwork._id} className="font-body text-sm text-neutral-700">
               <td className="py-3 pr-4">
                 <div className="flex items-center gap-3">
+                  <div className="flex flex-col flex-shrink-0">
+                    <button
+                      onClick={() => onMove(index, "up")}
+                      disabled={index === 0}
+                      className="text-neutral-400 hover:text-teal transition-colors disabled:opacity-25 disabled:cursor-not-allowed"
+                      title="Move up"
+                    >
+                      <FiChevronUp size={15} />
+                    </button>
+                    <button
+                      onClick={() => onMove(index, "down")}
+                      disabled={index === artworks.length - 1}
+                      className="text-neutral-400 hover:text-teal transition-colors disabled:opacity-25 disabled:cursor-not-allowed"
+                      title="Move down"
+                    >
+                      <FiChevronDown size={15} />
+                    </button>
+                  </div>
                   <img
                     src={resolveImageUrl(artwork.image)}
                     alt={artwork.title}

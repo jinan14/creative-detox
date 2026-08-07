@@ -8,6 +8,7 @@ const artworkSchema = new mongoose.Schema({
   price: { type: Number, required: true },
   category: { type: String, required: true },
   available: { type: Boolean, default: true },
+  order: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now },
 });
 

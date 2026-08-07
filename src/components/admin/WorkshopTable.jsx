@@ -1,4 +1,5 @@
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
+import resolveImageUrl from "../../utils/resolveImageUrl";
 
 const formatDate = (date) => {
   if (!date) return "—";

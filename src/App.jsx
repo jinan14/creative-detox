@@ -8,6 +8,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/Home'
 import About from './pages/About'
 import Workshops from './pages/Workshops'
+import WorkshopDetail from './pages/WorkshopDetail'
 import Gallery from './pages/Gallery'
 import ArtworkDetail from './pages/ArtworkDetail'
 import Contact from './pages/Contact'
@@ -45,6 +46,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<About />} />
             <Route path="/workshops" element={<Workshops />} />
+            <Route path="/workshops/:id" element={<WorkshopDetail />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="/gallery/:id" element={<ArtworkDetail />} />
             <Route path="/contact" element={<Contact />} />

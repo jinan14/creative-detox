@@ -32,6 +32,14 @@ app.use(
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
+app.use((req, res, next) => {
+  console.log(`[req] ${req.method} ${req.originalUrl} | origin=${req.headers.origin ?? '(none)'}`);
+  res.on('finish', () => {
+    console.log(`[res] ${req.method} ${req.originalUrl} -> ${res.statusCode}`);
+  });
+  next();
+});
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });

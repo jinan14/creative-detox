@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import {
   getWorkshops,
+  getWorkshopById,
   createWorkshop,
   updateWorkshop,
   deleteWorkshop,
@@ -11,6 +12,7 @@ import admin from '../middleware/admin.middleware.js';
 const router = Router();
 
 router.get('/', getWorkshops);
+router.get('/:id', getWorkshopById);
 router.post('/', auth, admin, createWorkshop);
 router.put('/:id', auth, admin, updateWorkshop);
 router.delete('/:id', auth, admin, deleteWorkshop);

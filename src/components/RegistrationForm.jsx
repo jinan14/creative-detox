@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
@@ -15,7 +15,7 @@ const formatDate = (date) => {
   return parsed.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
 };
 
-export default function RegistrationForm({ workshops = [] }) {
+export default function RegistrationForm({ workshops = [], initialWorkshopId = "" }) {
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -23,13 +23,19 @@ export default function RegistrationForm({ workshops = [] }) {
     name: "",
     email: "",
     phone: "",
-    workshop: "",
+    workshop: initialWorkshopId,
     date: "",
     message: "",
   });
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (initialWorkshopId) {
+      setForm((prev) => ({ ...prev, workshop: initialWorkshopId }));
+    }
+  }, [initialWorkshopId]);
 
   const validate = () => {
     const e = {};

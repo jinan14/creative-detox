@@ -10,7 +10,6 @@ import { useCart } from "../context/CartContext";
 const links = [
   { label: "Home", to: "/" },
   { label: "About", to: "/about" },
-  { label: "Workshops", to: "/workshops" },
   { label: "Gallery", to: "/gallery" },
   { label: "Gypsum", to: "/gypsum" },
   { label: "Recommend", to: "/recommend" },
@@ -85,7 +84,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Links */}
-          <ul className="hidden md:flex items-center gap-8">
+          <ul className="hidden lg:flex items-center gap-7">
             {links.map((link) => (
               <li key={link.to}>
                 <Link
@@ -101,11 +100,14 @@ export default function Navbar() {
           </ul>
 
           {/* CTA */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-3.5 whitespace-nowrap">
             {user ? (
               <>
                 {user.role === "admin" && (
-                  <Link to="/admin" className="nav-link">
+                  <Link
+                    to="/admin"
+                    className="rounded-full bg-berry px-4 py-1.5 font-body text-xs font-semibold text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-berry/90"
+                  >
                     Admin
                   </Link>
                 )}
@@ -117,9 +119,12 @@ export default function Navbar() {
                     </span>
                   )}
                 </Link>
-                <span className="flex items-center gap-1.5 text-sm text-neutral-700 font-body">
-                  <FiUser size={15} className="text-teal" />
-                  {user.name}
+                <span
+                  title={user.name}
+                  className="flex items-center gap-1.5 text-sm text-neutral-700 font-body max-w-[7rem] truncate"
+                >
+                  <FiUser size={15} className="text-teal shrink-0" />
+                  {user.name?.split(" ")[0]}
                 </span>
                 <button onClick={handleLogout} className="nav-link">
                   Logout
@@ -143,7 +148,7 @@ export default function Navbar() {
           {/* Mobile Hamburger */}
           <button
             onClick={toggleMobileMenu}
-            className="md:hidden text-teal p-2 rounded-xl hover:bg-berry/10 hover:text-berry transition-colors"
+            className="lg:hidden text-teal p-2 rounded-xl hover:bg-berry/10 hover:text-berry transition-colors"
             aria-label="Toggle menu"
           >
             {mobileOpen ? <HiX size={22} /> : <HiMenuAlt3 size={22} />}
@@ -185,9 +190,12 @@ export default function Navbar() {
             <div className="flex flex-col gap-4 mb-4">
               {user ? (
                 <>
-                  <span className="flex items-center gap-2 text-neutral-700 font-body">
-                    <FiUser size={16} className="text-teal" />
-                    {user.name}
+                  <span
+                    title={user.name}
+                    className="flex items-center gap-2 text-neutral-700 font-body truncate"
+                  >
+                    <FiUser size={16} className="text-teal shrink-0" />
+                    {user.name?.split(" ")[0]}
                   </span>
                   <Link
                     to="/cart"
@@ -201,7 +209,7 @@ export default function Navbar() {
                     <Link
                       to="/admin"
                       onClick={closeMobileMenu}
-                      className="font-body text-neutral-700 hover:text-teal transition-colors"
+                      className="inline-flex w-fit items-center rounded-full bg-berry px-4 py-2 font-body text-sm font-semibold text-white transition-colors hover:bg-berry/90"
                     >
                       Admin
                     </Link>

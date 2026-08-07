@@ -3,7 +3,7 @@ import { logAdminAction } from '../utils/adminLog.js';
 
 export const getArtworks = async (req, res) => {
   try {
-    const artworks = await Artwork.find().sort({ createdAt: -1 });
+    const artworks = await Artwork.find().sort({ order: 1, createdAt: -1 });
     res.json(artworks);
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch artworks', error: err.message });
@@ -30,7 +30,10 @@ export const createArtwork = async (req, res) => {
         .json({ message: 'Title, description, image, artist, price, and category are required' });
     }
 
-    const artwork = await Artwork.create({ title, description, image, artist, price, category, available });
+    const lastArtwork = await Artwork.findOne().sort({ order: -1 });
+    const order = lastArtwork ? lastArtwork.order + 1 : 0;
+
+    const artwork = await Artwork.create({ title, description, image, artist, price, category, available, order });
 
     await logAdminAction({
       adminId: req.user.id,
@@ -68,6 +71,30 @@ export const updateArtwork = async (req, res) => {
     res.json(artwork);
   } catch (err) {
     res.status(500).json({ message: 'Failed to update artwork', error: err.message });
+  }
+};
+
+export const reorderArtworks = async (req, res) => {
+  try {
+    const { ids } = req.body;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ message: 'ids array is required' });
+    }
+
+    await Promise.all(ids.map((id, index) => Artwork.findByIdAndUpdate(id, { order: index })));
+
+    await logAdminAction({
+      adminId: req.user.id,
+      action: 'update',
+      entityType: 'Artwork',
+      entityId: ids[0],
+      description: 'Reordered the artwork gallery',
+    });
+
+    const artworks = await Artwork.find().sort({ order: 1, createdAt: -1 });
+    res.json(artworks);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to reorder artworks', error: err.message });
   }
 };
 

@@ -10,6 +10,16 @@ export const getWorkshops = async (req, res) => {
   }
 };
 
+export const getWorkshopById = async (req, res) => {
+  try {
+    const workshop = await Workshop.findById(req.params.id);
+    if (!workshop) return res.status(404).json({ message: 'Workshop not found' });
+    res.json(workshop);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch workshop', error: err.message });
+  }
+};
+
 export const createWorkshop = async (req, res) => {
   try {
     const { title, description, date, time, location, capacity, price, image, category, duration, level } = req.body;

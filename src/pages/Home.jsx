@@ -1,9 +1,12 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 import WorkshopCard from "../components/WorkshopCard";
+import ArtworkCard from "../components/ArtworkCard";
 import TestimonialCard from "../components/TestimonialCard";
 import CTASection from "../components/CTASection";
+import api from "../api/axios";
 import { participantImages, workshopImages } from "../data/images";
 
 import {
@@ -92,6 +95,23 @@ const stats = [
 ];
 
 export default function Home() {
+  const [artworks, setArtworks] = useState([]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    api
+      .get("/artworks")
+      .then(({ data }) => {
+        if (!cancelled) setArtworks(data.slice(0, 3));
+      })
+      .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <main className="overflow-hidden">
       {/* Hero Section */}
@@ -172,6 +192,40 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Featured Artworks */}
+      {artworks.length > 0 && (
+        <section className="py-20 bg-cream">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center mb-14">
+              <p className="text-berry font-medium mb-3">
+                From The Gallery
+              </p>
+
+              <h2 className="text-4xl md:text-5xl font-display font-bold text-teal mb-4">
+                Original Artworks, Ready To Take Home
+              </h2>
+
+              <p className="text-neutral-600 max-w-2xl mx-auto leading-relaxed">
+                Browse original pieces made by our community of artists,
+                each one available to purchase and bring into your space.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {artworks.map((artwork, index) => (
+                <ArtworkCard key={artwork._id} artwork={artwork} index={index} />
+              ))}
+            </div>
+
+            <div className="text-center mt-14">
+              <Link to="/gallery" className="btn-primary">
+                Shop Our Artworks
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Why Creative Detox */}
       <section className="py-20 bg-cream">
