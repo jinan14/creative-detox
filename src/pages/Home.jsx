@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { FiArrowRight } from "react-icons/fi";
 
 import WorkshopCard from "../components/WorkshopCard";
 import ArtworkCard from "../components/ArtworkCard";
@@ -190,6 +191,45 @@ export default function Home() {
               <WorkshopCard key={index} {...workshop} />
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* AI Workshop Recommendation Teaser */}
+      <section className="py-14 bg-white">
+        <div className="max-w-5xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col md:flex-row items-center justify-between gap-6 rounded-[2rem] bg-gradient-to-r from-teal to-berry px-8 py-10 md:px-12 text-center md:text-left"
+          >
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center flex-shrink-0">
+                <HiOutlineSparkles size={26} className="text-white" />
+              </div>
+              <div>
+                <p className="font-body text-xs uppercase tracking-widest text-white/70 mb-2">
+                  Powered By AI
+                </p>
+                <h3 className="font-display text-2xl md:text-3xl font-bold text-white mb-1">
+                  Not Sure Which Workshop Fits You?
+                </h3>
+                <p className="font-body text-white/80 text-sm max-w-md">
+                  Tell us how you're feeling and let our AI match you with the
+                  right creative experience.
+                </p>
+              </div>
+            </div>
+
+            <Link
+              to="/recommend"
+              className="inline-flex items-center gap-2 px-7 py-3.5 bg-white text-teal font-body font-semibold text-sm rounded-full hover:-translate-y-1 hover:bg-cream transition-all duration-300 shadow-lg flex-shrink-0"
+            >
+              Get My Recommendation
+              <FiArrowRight size={16} />
+            </Link>
+          </motion.div>
         </div>
       </section>
 

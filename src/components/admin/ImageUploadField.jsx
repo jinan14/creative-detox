@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FiUpload, FiCheck } from "react-icons/fi";
 import api from "../../api/axios";
+import resolveImageUrl from "../../utils/resolveImageUrl";
 
 export default function ImageUploadField({ value, onChange }) {
   const [uploading, setUploading] = useState(false);
@@ -33,7 +34,11 @@ export default function ImageUploadField({ value, onChange }) {
     <div>
       <div className="flex items-center gap-4">
         {value ? (
-          <img src={value} alt="Preview" className="w-16 h-16 rounded-xl object-cover flex-shrink-0" />
+          <img
+            src={resolveImageUrl(value)}
+            alt="Preview"
+            className="w-16 h-16 rounded-xl object-cover flex-shrink-0"
+          />
         ) : (
           <div className="w-16 h-16 rounded-xl bg-neutral-100 flex items-center justify-center flex-shrink-0">
             <FiUpload size={18} className="text-neutral-400" />
