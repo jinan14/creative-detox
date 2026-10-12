@@ -77,6 +77,7 @@ export default function ArtworkDetail() {
         <div className="relative max-w-6xl mx-auto px-6">
           <Link
             to="/gallery"
+            state={{ restoreArtwork: id }}
             className="inline-flex items-center gap-2 text-sm font-body text-neutral-500 hover:text-teal transition-colors mb-8"
           >
             <FiArrowLeft size={15} /> Back to Gallery
@@ -102,13 +103,6 @@ export default function ArtworkDetail() {
                     alt={artwork.title}
                     className="w-full h-full max-h-[70vh] object-contain"
                   />
-                  <span
-                    className={`absolute top-4 left-4 text-xs font-body font-medium px-3 py-1 rounded-full ${
-                      categoryColors[artwork.category] || "bg-neutral-100 text-neutral-600"
-                    } backdrop-blur-sm`}
-                  >
-                    {artwork.category}
-                  </span>
                   {!artwork.available && (
                     <span className="absolute top-4 right-4 text-xs font-body font-medium px-3 py-1 rounded-full bg-berry/90 text-white backdrop-blur-sm">
                       Sold
@@ -124,9 +118,22 @@ export default function ArtworkDetail() {
                 </h1>
                 <p className="font-body text-neutral-400 mb-6">by {artwork.artist}</p>
 
-                <p className="font-body text-neutral-600 leading-relaxed mb-8">
+                <p className="font-body text-neutral-600 leading-relaxed mb-5">
                   {artwork.description}
                 </p>
+
+                {artwork.category && (
+                  <p className="flex items-center gap-2 font-body text-sm text-neutral-500 mb-8">
+                    Category
+                    <span
+                      className={`text-xs font-medium px-3 py-1 rounded-full ${
+                        categoryColors[artwork.category] || "bg-neutral-100 text-neutral-600"
+                      }`}
+                    >
+                      {artwork.category}
+                    </span>
+                  </p>
+                )}
 
                 <div className="flex items-center justify-between bg-white rounded-3xl p-6 shadow-card">
                   <span className="font-display text-3xl font-bold text-teal">${artwork.price}</span>

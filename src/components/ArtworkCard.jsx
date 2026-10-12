@@ -5,6 +5,7 @@ import { FiCheck } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import { resolveThumbnailUrl, fallbackToFullImage } from "../utils/resolveImageUrl";
+import { rememberArtwork } from "../utils/galleryReturn";
 
 const categoryColors = {
   Painting: "bg-teal/10 text-teal",
@@ -46,10 +47,12 @@ export default function ArtworkCard({ artwork, index = 0, priority = false }) {
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
-      className="group flex flex-col bg-white rounded-3xl overflow-hidden shadow-soft"
+      // Stagger per row only, so cards far down the list don't wait seconds to appear.
+      transition={{ duration: 0.5, delay: (index % 3) * 0.1, ease: [0.22, 1, 0.36, 1] }}
+      id={`artwork-${_id}`}
+      className="group flex flex-col bg-white rounded-3xl overflow-hidden shadow-soft scroll-mt-28"
     >
-      <Link to={`/gallery/${_id}`} className="flex flex-col flex-1">
+      <Link to={`/gallery/${_id}`} onClick={() => rememberArtwork(_id)} className="flex flex-col flex-1">
         {/* Image */}
         <div className="relative overflow-hidden h-96 bg-cream">
           <img

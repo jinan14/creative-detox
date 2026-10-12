@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useLocation, useNavigationType } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import ArtworkCard from "../components/ArtworkCard";
+import { takeRememberedArtwork } from "../utils/galleryReturn";
 import api from "../api/axios";
 import ServerWakeNotice from "../components/ServerWakeNotice";
 import WatercolorBackground from "../components/home/WatercolorBackground";
@@ -31,6 +33,30 @@ export default function Gallery() {
   const [artworks, setArtworks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const location = useLocation();
+  const navigationType = useNavigationType();
+
+  // Coming back from an artwork ("Back to Gallery" or the browser's back
+  // button): once the cards exist, scroll to the one that was opened.
+  useEffect(() => {
+    if (loading || artworks.length === 0) return;
+    const remembered = takeRememberedArtwork();
+    const id = location.state?.restoreArtwork || (navigationType === "POP" ? remembered : null);
+    if (!id) return;
+
+    const card = document.getElementById(`artwork-${id}`);
+    if (!card) return;
+    card.scrollIntoView({ block: "center" });
+    // Brief berry glow so the eye finds it.
+    card.animate(
+      [
+        { boxShadow: "0 0 0 0 rgb(184 92 122 / 0.55)" },
+        { boxShadow: "0 0 0 10px rgb(184 92 122 / 0)" },
+      ],
+      { duration: 1100, delay: 250, iterations: 2, easing: "ease-out" }
+    );
+  }, [loading, artworks.length, location.state, navigationType]);
 
   useEffect(() => {
     let cancelled = false;
