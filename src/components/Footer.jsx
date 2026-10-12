@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { FiInstagram, FiMail, FiMapPin } from "react-icons/fi";
 import logo from "../assets/logo.png";
+import WatercolorBackground from "./home/WatercolorBackground";
 
 const links = [
   { label: "Home", to: "/" },
@@ -12,9 +13,37 @@ const links = [
 
 export default function Footer() {
   return (
-    <footer className="bg-neutral-900 text-neutral-300 pt-16 pb-8">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 pb-12 border-b border-neutral-800">
+    // Pulled up over the previous section so the wave's transparent top shows
+    // whatever background that page ends with.
+    <footer className="relative z-10 -mt-16 md:-mt-20 text-cream/85 pt-28 md:pt-32 pb-8 overflow-hidden">
+      <svg
+        aria-hidden
+        viewBox="0 0 1440 90"
+        preserveAspectRatio="none"
+        className="absolute top-0 left-0 w-full h-16 md:h-20"
+      >
+        <path
+          d="M0 56 C 160 18, 300 60, 470 50 S 800 70, 980 44 S 1300 70, 1440 38 V90 H0 Z"
+          fill="var(--color-footer)"
+        />
+        <path
+          d="M0 56 C 160 18, 300 60, 470 50 S 800 70, 980 44 S 1300 70, 1440 38"
+          fill="none"
+          stroke="var(--color-berry)"
+          strokeWidth="5"
+          strokeLinecap="round"
+          opacity="0.45"
+        />
+      </svg>
+      <div className="absolute inset-x-0 bottom-0 top-[calc(4rem-1px)] md:top-[calc(5rem-1px)] bg-[linear-gradient(180deg,var(--color-footer)_0%,var(--color-footer-deep)_80%)] overflow-hidden">
+        {/* Fade the pigment in so there is no seam under the wave */}
+        <div className="absolute inset-0 [mask-image:linear-gradient(to_bottom,transparent,black_160px)]">
+          <WatercolorBackground intensity={0.1} blend="screen" />
+        </div>
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 pb-12 border-b border-white/15">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-2 mb-4">
@@ -28,7 +57,7 @@ export default function Footer() {
                 <span className="font-display font-bold text-sage-light text-lg ml-1">Detox</span>
               </div>
             </div>
-            <p className="font-body text-sm text-neutral-400 leading-relaxed max-w-xs">
+            <p className="font-body text-sm text-cream/85 leading-relaxed max-w-xs">
               Art for your mental escape. We create safe, joyful spaces where creativity 
               meets wellness — no experience required.
             </p>
@@ -37,15 +66,15 @@ export default function Footer() {
                 href="https://www.instagram.com/creative.detox.art?igsh=MWp6Nno0ZW9heWFjZg%3D%3D&utm_source=qr"
                 target="_blank"
                 rel="noreferrer"
-                className="w-10 h-10 rounded-full bg-neutral-800 hover:bg-berry transition-colors flex items-center justify-center group"
+                className="w-10 h-10 rounded-full bg-white/10 hover:bg-berry transition-colors flex items-center justify-center group"
               >
-                <FiInstagram size={16} className="text-neutral-400 group-hover:text-white transition-colors" />
+                <FiInstagram size={16} className="text-cream/85 group-hover:text-white transition-colors" />
               </a>
               <a
                 href="mailto:creativedetox@gmail.com"
-                className="w-10 h-10 rounded-full bg-neutral-800 hover:bg-berry transition-colors flex items-center justify-center group"
+                className="w-10 h-10 rounded-full bg-white/10 hover:bg-berry transition-colors flex items-center justify-center group"
               >
-                <FiMail size={16} className="text-neutral-400 group-hover:text-white transition-colors" />
+                <FiMail size={16} className="text-cream/85 group-hover:text-white transition-colors" />
               </a>
             </div>
           </div>
@@ -58,7 +87,7 @@ export default function Footer() {
                 <li key={link.to}>
                   <Link
                     to={link.to}
-                    className="font-body text-sm text-neutral-400 hover:text-white transition-colors hover:translate-x-1 inline-block"
+                    className="font-body text-sm text-cream/85 hover:text-white transition-colors hover:translate-x-1 inline-block"
                   >
                     {link.label}
                   </Link>
@@ -72,20 +101,20 @@ export default function Footer() {
             <h4 className="font-display font-semibold text-white text-lg mb-5">Get In Touch</h4>
             <ul className="flex flex-col gap-4">
               <li className="flex items-start gap-3">
-                <FiMail size={16} className="text-berry mt-0.5 flex-shrink-0" />
-                <a href="mailto:creativedetox@gmail.com" className="font-body text-sm text-neutral-400 hover:text-white transition-colors">
+                <FiMail size={16} className="text-rose-muted mt-0.5 flex-shrink-0" />
+                <a href="mailto:creativedetox@gmail.com" className="font-body text-sm text-cream/85 hover:text-white transition-colors">
                   creativedetox@gmail.com
                 </a>
               </li>
               <li className="flex items-start gap-3">
-                <FiInstagram size={16} className="text-berry mt-0.5 flex-shrink-0" />
-                <a href="https://www.instagram.com/creative.detox.art?igsh=MWp6Nno0ZW9heWFjZg%3D%3D&utm_source=qr" target="_blank" rel="noreferrer" className="font-body text-sm text-neutral-400 hover:text-white transition-colors">
+                <FiInstagram size={16} className="text-rose-muted mt-0.5 flex-shrink-0" />
+                <a href="https://www.instagram.com/creative.detox.art?igsh=MWp6Nno0ZW9heWFjZg%3D%3D&utm_source=qr" target="_blank" rel="noreferrer" className="font-body text-sm text-cream/85 hover:text-white transition-colors">
                   @creative.detox.art
                 </a>
               </li>
               <li className="flex items-start gap-3">
-                <FiMapPin size={16} className="text-berry mt-0.5 flex-shrink-0" />
-                <span className="font-body text-sm text-neutral-400">Beirut, Lebanon</span>
+                <FiMapPin size={16} className="text-rose-muted mt-0.5 flex-shrink-0" />
+                <span className="font-body text-sm text-cream/85">Beirut, Lebanon</span>
               </li>
             </ul>
             <Link to="/workshops" className="mt-6 btn-berry text-xs px-5 py-2.5 inline-flex">
@@ -95,10 +124,13 @@ export default function Footer() {
         </div>
 
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="font-body text-xs text-neutral-600">
+          <p className="font-body text-xs text-cream/75">
             © {new Date().getFullYear()} Creative Detox. All rights reserved.
           </p>
-          <p className="font-body text-xs text-neutral-600">
+          <p className="font-hand text-xl text-rose-muted -rotate-2">
+            made with paint &amp; love ♡
+          </p>
+          <p className="font-body text-xs text-cream/75">
             Website generated by Jinan Ghannam.
           </p>
         </div>

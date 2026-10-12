@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { FiTrash2, FiShoppingBag } from "react-icons/fi";
 import { useCart } from "../context/CartContext";
 import { resolveThumbnailUrl, fallbackToFullImage } from "../utils/resolveImageUrl";
+import WatercolorBackground from "../components/home/WatercolorBackground";
+import BrushUnderline from "../components/home/BrushUnderline";
 
 export default function Cart() {
   const { items, loading, total, removeItem } = useCart();
@@ -20,8 +22,9 @@ export default function Cart() {
 
   return (
     <main className="overflow-hidden">
-      <section className="bg-cream pt-36 pb-24 min-h-screen">
-        <div className="max-w-4xl mx-auto px-6">
+      <section className="relative overflow-hidden bg-cream pt-36 pb-24 min-h-screen">
+        <WatercolorBackground intensity={0.25} />
+        <div className="relative max-w-4xl mx-auto px-6">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -37,7 +40,7 @@ export default function Cart() {
             transition={{ duration: 0.6 }}
             className="text-4xl md:text-5xl font-display font-bold text-teal mb-10 text-center"
           >
-            Review Your Selection
+            Review Your <BrushUnderline>Selection</BrushUnderline>
           </motion.h1>
 
           {loading && (

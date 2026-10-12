@@ -7,6 +7,7 @@ import ServerWakeNotice from "../components/ServerWakeNotice";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import resolveImageUrl from "../utils/resolveImageUrl";
+import WatercolorBackground from "../components/home/WatercolorBackground";
 
 const categoryColors = {
   Painting: "bg-teal/10 text-teal",
@@ -71,8 +72,9 @@ export default function ArtworkDetail() {
 
   return (
     <main className="overflow-hidden">
-      <section className="bg-cream pt-36 pb-24 min-h-screen">
-        <div className="max-w-6xl mx-auto px-6">
+      <section className="relative overflow-hidden bg-cream pt-36 pb-24 min-h-screen">
+        <WatercolorBackground intensity={0.25} />
+        <div className="relative max-w-6xl mx-auto px-6">
           <Link
             to="/gallery"
             className="inline-flex items-center gap-2 text-sm font-body text-neutral-500 hover:text-teal transition-colors mb-8"

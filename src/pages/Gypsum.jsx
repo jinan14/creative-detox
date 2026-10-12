@@ -30,6 +30,8 @@ import {
 import gypsumSample1 from "../assets/gypsumSample1.jpg";
 import gypsumSample2 from "../assets/gypsumSample2.jpg";
 import gypsumSample3 from "../assets/gypsumSample3.jpg";
+import WatercolorBackground from "../components/home/WatercolorBackground";
+import BrushUnderline from "../components/home/BrushUnderline";
 
 const sampleWork = [
   { src: gypsumSample1, caption: " Gold paper, Medium size" },
@@ -189,8 +191,9 @@ export default function Gypsum() {
   return (
     <main className="overflow-hidden">
       {/* Hero Section */}
-      <section className="bg-cream pt-36 pb-24">
-        <div className="max-w-5xl mx-auto px-6 text-center">
+      <section className="relative overflow-hidden bg-cream pt-36 pb-24">
+        <WatercolorBackground intensity={0.35} />
+        <div className="relative max-w-5xl mx-auto px-6 text-center">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -206,7 +209,7 @@ export default function Gypsum() {
             transition={{ duration: 0.6 }}
             className="text-5xl md:text-6xl font-display font-bold text-teal mb-6"
           >
-            Order a Personalized Piece
+            Order a <BrushUnderline>Personalized</BrushUnderline> Piece
           </motion.h1>
 
           <motion.p

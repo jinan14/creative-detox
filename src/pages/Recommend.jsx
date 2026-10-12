@@ -15,6 +15,8 @@ import {
 import { useAuth } from "../context/AuthContext";
 import api from "../api/axios";
 import WorkshopCard from "../components/WorkshopCard";
+import WatercolorBackground from "../components/home/WatercolorBackground";
+import BrushUnderline from "../components/home/BrushUnderline";
 
 const emotions = [
   { label: "Stressed", icon: FiCloudRain },
@@ -73,8 +75,9 @@ export default function Recommend() {
   return (
     <main className="overflow-hidden">
       {/* Hero Section */}
-      <section className="bg-cream pt-36 pb-24">
-        <div className="max-w-5xl mx-auto px-6 text-center">
+      <section className="relative overflow-hidden bg-cream pt-36 pb-24">
+        <WatercolorBackground intensity={0.35} />
+        <div className="relative max-w-5xl mx-auto px-6 text-center">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -90,7 +93,7 @@ export default function Recommend() {
             transition={{ duration: 0.6 }}
             className="text-5xl md:text-6xl font-display font-bold text-teal mb-6"
           >
-            How Are You Feeling Today?
+            How Are You <BrushUnderline>Feeling</BrushUnderline> Today?
           </motion.h1>
 
           <motion.p

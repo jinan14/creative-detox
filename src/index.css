@@ -5,6 +5,10 @@
   --color-teal: #1D6A8A;
   --color-teal-dark: #1f6f6b;
   --color-teal-light: #9fd6ce;
+  --color-teal-deep: #123f52;
+  /* Muted slate-teal for the footer, so it sits quietly under the page. */
+  --color-footer: #4a646b;
+  --color-footer-deep: #3c535a;
   --color-berry: #b85c7a;
   --color-sage: #8aa889;
   --color-sage-light: #c7dbc4;

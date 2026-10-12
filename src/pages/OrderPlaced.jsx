@@ -3,6 +3,7 @@ import { Link, Navigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiCheck, FiMessageCircle } from "react-icons/fi";
 import { WISH_MONEY_NUMBER } from "../utils/customerInfo";
+import WatercolorBackground from "../components/home/WatercolorBackground";
 
 // Landing page after an artwork or gypsum order is saved. It redirects to
 // WhatsApp on arrival; the state lives in history, so pressing Back from
@@ -29,8 +30,9 @@ export default function OrderPlaced() {
 
   return (
     <main className="overflow-hidden">
-      <section className="bg-cream pt-36 pb-24 min-h-screen">
-        <div className="max-w-xl mx-auto px-6">
+      <section className="relative overflow-hidden bg-cream pt-36 pb-24 min-h-screen">
+        <WatercolorBackground intensity={0.3} />
+        <div className="relative max-w-xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}

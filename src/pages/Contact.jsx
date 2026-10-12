@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { FiInstagram, FiMail, FiMapPin, FiPhone } from "react-icons/fi";
 
 import RegistrationForm from "../components/RegistrationForm";
+import WatercolorBackground from "../components/home/WatercolorBackground";
+import BrushUnderline from "../components/home/BrushUnderline";
 
 const contactMethods = [
   {
@@ -32,8 +34,9 @@ const contactMethods = [
 export default function Contact() {
   return (
     <main className="overflow-hidden">
-      <section className="bg-cream pt-36 pb-24">
-        <div className="max-w-5xl mx-auto px-6 text-center">
+      <section className="relative overflow-hidden bg-cream pt-36 pb-24">
+        <WatercolorBackground intensity={0.35} />
+        <div className="relative max-w-5xl mx-auto px-6 text-center">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -49,7 +52,7 @@ export default function Contact() {
             transition={{ duration: 0.6 }}
             className="text-5xl md:text-6xl font-display font-bold text-teal mb-6"
           >
-            Start Your Creative Detox
+            Start Your Creative <BrushUnderline>Detox</BrushUnderline>
           </motion.h1>
 
           <motion.p

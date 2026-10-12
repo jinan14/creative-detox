@@ -3,6 +3,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiMail, FiLock } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
+import WatercolorBackground from "../components/home/WatercolorBackground";
+import BrushUnderline from "../components/home/BrushUnderline";
 
 const inputClass =
   "w-full min-w-0 max-w-full px-4 py-3 rounded-2xl border border-neutral-200 bg-white font-body text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition-all duration-200";
@@ -39,8 +41,9 @@ export default function Login() {
 
   return (
     <main className="overflow-hidden">
-      <section className="bg-cream pt-36 pb-24 min-h-screen">
-        <div className="max-w-md mx-auto px-6">
+      <section className="relative overflow-hidden bg-cream pt-36 pb-24 min-h-screen">
+        <WatercolorBackground intensity={0.25} />
+        <div className="relative max-w-md mx-auto px-6">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -56,7 +59,7 @@ export default function Login() {
             transition={{ duration: 0.6 }}
             className="text-4xl md:text-5xl font-display font-bold text-teal mb-8 text-center"
           >
-            Log In
+            Log <BrushUnderline>In</BrushUnderline>
           </motion.h1>
 
           <motion.div

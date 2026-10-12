@@ -8,23 +8,17 @@ import ArtworkCard from "../components/ArtworkCard";
 import TestimonialCard from "../components/TestimonialCard";
 import CTASection from "../components/CTASection";
 import HeroGallery from "../components/home/HeroGallery";
-import HeroPaint from "../components/home/HeroPaint";
-import HeroSwitch from "../components/home/HeroSwitch";
 import WordMarquee from "../components/home/WordMarquee";
 import BrushReveal from "../components/home/BrushReveal";
 import BrushUnderline from "../components/home/BrushUnderline";
-import CalligraphyBadge from "../components/home/CalligraphyBadge";
+import CarvingBadge from "../components/home/CarvingBadge";
 import StatsSection from "../components/home/StatsSection";
+import WhySection from "../components/home/WhySection";
 import api from "../api/axios";
 import { participantImages, workshopImages } from "../data/images";
 import gypsumSample1 from "../assets/gypsumSample1.jpg";
 
-import {
-  HiOutlineHeart,
-  HiOutlineSparkles,
-  HiOutlineUsers,
-  HiOutlineLightBulb,
-} from "react-icons/hi";
+import { HiOutlineSparkles } from "react-icons/hi";
 
 const featuredWorkshops = [
   {
@@ -47,29 +41,6 @@ const featuredWorkshops = [
       "Fun artistic workshops designed to inspire creativity in children.",
     category: "Kids",
     image: workshopImages.kids,
-  },
-];
-
-const features = [
-  {
-    icon: HiOutlineHeart,
-    title: "Stress Relief",
-    text: "Art helps you relax, recharge, and disconnect from daily stress.",
-  },
-  {
-    icon: HiOutlineSparkles,
-    title: "Self Expression",
-    text: "Explore your thoughts and emotions through creativity.",
-  },
-  {
-    icon: HiOutlineUsers,
-    title: "Community",
-    text: "Connect with inspiring people in a welcoming creative space.",
-  },
-  {
-    icon: HiOutlineLightBulb,
-    title: "Creative Exploration",
-    text: "Experiment with different art styles and discover new passions.",
   },
 ];
 
@@ -97,30 +68,8 @@ const testimonials = [
   },
 ];
 
-// TEMPORARY hero comparison: ?hero=paint|gallery, remembered per browser.
-const HERO_KEY = "heroVariant";
-const readHeroVariant = () => {
-  const fromUrl = new URLSearchParams(window.location.search).get("hero");
-  if (fromUrl === "gallery" || fromUrl === "paint") return fromUrl;
-  try {
-    return localStorage.getItem(HERO_KEY) === "paint" ? "paint" : "gallery";
-  } catch {
-    return "gallery";
-  }
-};
-
 export default function Home() {
   const [artworks, setArtworks] = useState([]);
-  const [heroVariant, setHeroVariant] = useState(readHeroVariant);
-
-  const changeHeroVariant = (variant) => {
-    setHeroVariant(variant);
-    try {
-      localStorage.setItem(HERO_KEY, variant);
-    } catch {
-      // Private mode etc. — the switch still works for this visit.
-    }
-  };
 
   useEffect(() => {
     let cancelled = false;
@@ -139,7 +88,7 @@ export default function Home() {
 
   return (
     <main className="overflow-hidden">
-      {heroVariant === "paint" ? <HeroPaint /> : <HeroGallery artworks={artworks} />}
+      <HeroGallery artworks={artworks} />
 
       <WordMarquee />
 
@@ -254,7 +203,7 @@ export default function Home() {
                 className="rounded-[2rem] shadow-soft w-full h-[420px] object-cover"
               />
             </BrushReveal>
-            <CalligraphyBadge className="absolute z-20 -bottom-2 left-4 lg:-bottom-10" />
+            <CarvingBadge className="absolute z-20 -bottom-2 left-4 lg:-bottom-10" />
           </div>
 
           <motion.div
@@ -283,51 +232,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Why Creative Detox */}
-      <section className="py-20 bg-cream">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-14">
-            <p className="text-berry font-medium mb-3">
-              Why Creative Detox
-            </p>
-
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-teal mb-4">
-              More Than Just Art
-            </h2>
-
-            <p className="text-neutral-600 max-w-2xl mx-auto leading-relaxed">
-              Our workshops are designed to nurture creativity, mindfulness,
-              and emotional wellness in a welcoming environment.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => {
-              const Icon = feature.icon;
-
-              return (
-                <motion.div
-                  key={index}
-                  whileHover={{ y: -8 }}
-                  className="bg-white rounded-3xl p-8 shadow-soft"
-                >
-                  <div className="w-16 h-16 rounded-2xl bg-teal/10 text-teal flex items-center justify-center mb-6">
-                    <Icon size={32} />
-                  </div>
-
-                  <h3 className="text-2xl font-semibold text-neutral-800 mb-4">
-                    {feature.title}
-                  </h3>
-
-                  <p className="text-neutral-600 leading-relaxed">
-                    {feature.text}
-                  </p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      <WhySection />
 
       {/* Testimonials */}
       <section className="relative py-24 bg-white overflow-hidden">
@@ -365,7 +270,6 @@ export default function Home() {
 
       {/* CTA Section */}
       <CTASection />
-      <HeroSwitch value={heroVariant} onChange={changeHeroVariant} />
     </main>
   );
 }

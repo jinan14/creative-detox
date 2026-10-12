@@ -9,7 +9,8 @@ const blobs = [
   { color: "var(--color-teal-light)", size: "24vw", top: "60%", left: "75%", x: [0, -30, 10, 0], y: [0, -60, -20, 0], duration: 28 },
 ];
 
-export default function WatercolorBackground({ intensity = 0.35, className = "" }) {
+// `blend="screen"` lets the pigment glow on dark backgrounds (e.g. the footer).
+export default function WatercolorBackground({ intensity = 0.35, className = "", blend = "multiply" }) {
   const reduceMotion = useReducedMotion();
 
   return (
@@ -17,7 +18,7 @@ export default function WatercolorBackground({ intensity = 0.35, className = "" 
       {blobs.map((blob, i) => (
         <motion.div
           key={i}
-          className="absolute rounded-full blur-3xl mix-blend-multiply"
+          className={`absolute rounded-full blur-3xl ${blend === "screen" ? "mix-blend-screen" : "mix-blend-multiply"}`}
           style={{
             width: blob.size,
             height: blob.size,
@@ -36,7 +37,7 @@ export default function WatercolorBackground({ intensity = 0.35, className = "" 
           transition={{ duration: blob.duration, repeat: Infinity, ease: "easeInOut" }}
         />
       ))}
-      <div className="absolute inset-0 paper-grain" />
+      {blend === "multiply" && <div className="absolute inset-0 paper-grain" />}
     </div>
   );
 }
