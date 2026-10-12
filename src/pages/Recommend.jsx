@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -17,6 +17,7 @@ import api from "../api/axios";
 import WorkshopCard from "../components/WorkshopCard";
 import WatercolorBackground from "../components/home/WatercolorBackground";
 import BrushUnderline from "../components/home/BrushUnderline";
+import MatchingLoader from "../components/recommend/MatchingLoader";
 
 const emotions = [
   { label: "Stressed", icon: FiCloudRain },
@@ -38,6 +39,9 @@ export default function Recommend() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [results, setResults] = useState(null);
+  // The loader stays up until its bar reaches 100%, then hands over to the results.
+  const [pending, setPending] = useState(null);
+  const loaderRef = useRef(null);
 
   const handleEmotionClick = (label) => {
     setSelectedEmotion(label);
@@ -62,15 +66,22 @@ export default function Recommend() {
     setLoading(true);
     setError("");
     setResults(null);
+    setPending(null);
+    setTimeout(() => loaderRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }), 50);
     try {
       const { data } = await api.post("/ai/recommend", { input });
-      setResults(data.workshops || []);
+      setPending(data.workshops || []);
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong. Please try again.");
-    } finally {
       setLoading(false);
     }
   };
+
+  const showResults = useCallback(() => {
+    setResults(pending);
+    setPending(null);
+    setLoading(false);
+  }, [pending]);
 
   return (
     <main className="overflow-hidden">
@@ -173,6 +184,22 @@ export default function Recommend() {
         </div>
       </section>
 
+      {/* Loading */}
+      <div ref={loaderRef} className="scroll-mt-28">
+        <AnimatePresence>
+          {loading && (
+            <motion.section
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="pb-24 bg-white"
+            >
+              <MatchingLoader done={pending !== null} onFinished={showResults} />
+            </motion.section>
+          )}
+        </AnimatePresence>
+      </div>
+
       {/* Results */}
       <AnimatePresence>
         {results !== null && (
@@ -196,9 +223,30 @@ export default function Recommend() {
               )}
 
               {results.length > 0 && (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="flex flex-wrap justify-center gap-8">
                   {results.map((workshop, index) => (
-                    <WorkshopCard key={workshop._id} workshop={workshop} index={index} />
+                    <div
+                      key={workshop._id}
+                      className="flex flex-col gap-4 w-full md:w-[calc(50%-1rem)] lg:w-[calc(33.333%-1.34rem)]"
+                    >
+                      {workshop.matchReason && (
+                        <motion.p
+                          initial={{ opacity: 0, y: 10, rotate: -2 }}
+                          animate={{ opacity: 1, y: 0, rotate: index % 2 ? 1 : -1 }}
+                          transition={{ delay: 0.2 + index * 0.15 }}
+                          className="relative bg-cream rounded-2xl px-5 py-3 font-hand text-xl leading-snug text-teal shadow-soft"
+                        >
+                          <span className="text-berry">{index === 0 ? "★ Best match — " : "✦ "}</span>
+                          {workshop.matchReason}
+                          {/* Little speech-bubble tail pointing at the card */}
+                          <span
+                            aria-hidden
+                            className="absolute -bottom-2 left-8 w-4 h-4 bg-cream rotate-45"
+                          />
+                        </motion.p>
+                      )}
+                      <WorkshopCard workshop={workshop} index={index} />
+                    </div>
                   ))}
                 </div>
               )}
