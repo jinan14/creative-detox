@@ -1,3 +1,4 @@
+import { FiTrash2 } from "react-icons/fi";
 import CustomerCell from "./CustomerCell";
 import { orderReference } from "../../utils/whatsapp";
 
@@ -22,7 +23,7 @@ const formatDate = (date) => {
   return parsed.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 };
 
-export default function OrdersTable({ orders, onStatusChange }) {
+export default function OrdersTable({ orders, onStatusChange, onDelete }) {
   if (orders.length === 0) {
     return (
       <p className="text-center text-neutral-500 font-body py-10">
@@ -74,7 +75,7 @@ export default function OrdersTable({ orders, onStatusChange }) {
                 {formatDate(order.placedAt)}
               </td>
               <td className="py-3">
-                <div className="flex justify-end">
+                <div className="flex items-center justify-end gap-1.5">
                   <select
                     value={order.status || "pending"}
                     onChange={(e) => onStatusChange(order, e.target.value)}
@@ -86,6 +87,13 @@ export default function OrdersTable({ orders, onStatusChange }) {
                       </option>
                     ))}
                   </select>
+                  <button
+                    onClick={() => onDelete(order)}
+                    className="p-2 text-neutral-400 hover:text-berry transition-colors"
+                    title="Delete"
+                  >
+                    <FiTrash2 size={16} />
+                  </button>
                 </div>
               </td>
             </tr>

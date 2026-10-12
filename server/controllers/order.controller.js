@@ -78,3 +78,24 @@ export const updateOrder = async (req, res) => {
     res.status(500).json({ message: 'Failed to update order', error: err.message });
   }
 };
+
+export const deleteOrder = async (req, res) => {
+  try {
+    const order = await Order.findByIdAndDelete(req.params.id);
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    await logAdminAction({
+      adminId: req.user.id,
+      action: 'delete',
+      entityType: 'Order',
+      entityId: order._id,
+      description: `Deleted artwork order from ${order.customer?.fullName || 'a customer'} ($${order.total})`,
+    });
+
+    res.json({ message: 'Order deleted' });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to delete order', error: err.message });
+  }
+};

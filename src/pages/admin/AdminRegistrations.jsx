@@ -30,6 +30,18 @@ export default function AdminRegistrations() {
       .finally(() => setLoading(false));
   }, [workshopFilter]);
 
+  const handleDelete = async (registration) => {
+    const who = registration.user?.name || "this participant";
+    const workshop = registration.workshop?.title || "this workshop";
+    if (!window.confirm(`Remove ${who} from "${workshop}"? Their seat will be freed up.`)) return;
+    try {
+      await api.delete(`/registrations/${registration._id}`);
+      setRegistrations((prev) => prev.filter((r) => r._id !== registration._id));
+    } catch {
+      setError("Failed to delete registration.");
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -51,7 +63,7 @@ export default function AdminRegistrations() {
       <div className="bg-white rounded-3xl p-6 shadow-card">
         {loading && <p className="text-center text-neutral-500 font-body py-10">Loading registrations...</p>}
         {!loading && error && <p className="text-center text-berry font-body py-10">{error}</p>}
-        {!loading && !error && <RegistrationsTable registrations={registrations} />}
+        {!loading && !error && <RegistrationsTable registrations={registrations} onDelete={handleDelete} />}
       </div>
     </div>
   );

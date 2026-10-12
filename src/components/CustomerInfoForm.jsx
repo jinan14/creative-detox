@@ -1,14 +1,34 @@
-import { FiUser, FiPhone, FiMail, FiMapPin, FiHome, FiMessageSquare } from "react-icons/fi";
+import {
+  FiUser,
+  FiPhone,
+  FiMail,
+  FiMapPin,
+  FiHome,
+  FiMessageSquare,
+  FiDollarSign,
+  FiSmartphone,
+} from "react-icons/fi";
 import { paymentMethods } from "../utils/customerInfo";
+
+const paymentIcons = {
+  cash_on_delivery: FiDollarSign,
+  wish_money: FiSmartphone,
+};
 
 const inputClass =
   "w-full min-w-0 max-w-full px-4 py-3 rounded-2xl border border-neutral-200 bg-white font-body text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition-all duration-200";
 
-function Field({ icon: Icon, error, children }) {
+// Single-line fields center the icon vertically; the textarea pins it to the first line.
+function Field({ icon: Icon, error, multiline = false, children }) {
   return (
     <div>
       <div className="relative">
-        <Icon size={15} className="absolute left-3.5 top-3.5 text-neutral-400" />
+        <Icon
+          size={15}
+          className={`absolute left-3.5 text-neutral-400 pointer-events-none ${
+            multiline ? "top-3.5" : "top-1/2 -translate-y-1/2"
+          }`}
+        />
         {children}
       </div>
       {error && <p className="mt-1 text-xs text-berry font-body">{error}</p>}
@@ -82,7 +102,7 @@ export default function CustomerInfoForm({ value, errors, onChange }) {
         />
       </Field>
 
-      <Field icon={FiMessageSquare} error={errors.notes}>
+      <Field icon={FiMessageSquare} error={errors.notes} multiline>
         <textarea
           name="notes"
           value={value.notes}
@@ -100,12 +120,13 @@ export default function CustomerInfoForm({ value, errors, onChange }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {paymentMethods.map((method) => {
             const selected = value.paymentMethod === method.value;
+            const Icon = paymentIcons[method.value];
             return (
               <label
                 key={method.value}
                 className={`cursor-pointer rounded-2xl border p-4 transition-all duration-200 ${
                   selected
-                    ? "border-teal bg-teal/5 ring-2 ring-teal/30"
+                    ? "border-teal bg-white ring-2 ring-teal/30"
                     : "border-neutral-200 bg-white hover:border-teal/40"
                 }`}
               >
@@ -117,7 +138,14 @@ export default function CustomerInfoForm({ value, errors, onChange }) {
                   onChange={handleChange}
                   className="sr-only"
                 />
-                <span className="block font-display font-semibold text-neutral-900">
+                <span className="flex items-center gap-2.5 font-display font-semibold text-neutral-900">
+                  <span
+                    className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
+                      selected ? "bg-teal text-white" : "bg-teal/10 text-teal"
+                    }`}
+                  >
+                    <Icon size={15} />
+                  </span>
                   {method.label}
                 </span>
                 <span className="block font-body text-xs text-neutral-500 mt-1">

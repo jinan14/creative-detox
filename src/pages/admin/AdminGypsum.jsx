@@ -30,6 +30,16 @@ export default function AdminGypsum() {
     }
   };
 
+  const handleDelete = async (order) => {
+    if (!window.confirm(`Delete the gypsum order "${order.arabicText}"? This can't be undone.`)) return;
+    try {
+      await api.delete(`/gypsum/${order._id}`);
+      setOrders((prev) => prev.filter((o) => o._id !== order._id));
+    } catch {
+      setError("Failed to delete gypsum order.");
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <h2 className="font-display text-2xl font-bold text-neutral-900">Gypsum Orders</h2>
@@ -38,7 +48,11 @@ export default function AdminGypsum() {
         {loading && <p className="text-center text-neutral-500 font-body py-10">Loading orders...</p>}
         {!loading && error && <p className="text-center text-berry font-body py-10">{error}</p>}
         {!loading && !error && (
-          <GypsumOrdersTable orders={orders} onStatusChange={handleStatusChange} />
+          <GypsumOrdersTable
+            orders={orders}
+            onStatusChange={handleStatusChange}
+            onDelete={handleDelete}
+          />
         )}
       </div>
     </div>

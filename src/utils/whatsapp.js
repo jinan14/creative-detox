@@ -1,4 +1,5 @@
 import { paymentLabel, WISH_MONEY_NUMBER } from "./customerInfo";
+import { shapeLabel, sizeDimensions } from "./gypsumOptions";
 
 // Digits only, international format, no "+" — that's what wa.me expects.
 const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || "96176190801";
@@ -20,14 +21,10 @@ const customerLines = (customer) => [
   ...(customer.notes?.trim() ? [`Delivery notes: ${customer.notes.trim()}`] : []),
 ];
 
-const paymentLines = (customer, amountKnown) => {
+const paymentLines = (customer) => {
   const lines = ["*Payment*", `Method: ${paymentLabel(customer.paymentMethod)}`];
   if (customer.paymentMethod === "wish_money") {
-    lines.push(
-      amountKnown
-        ? `I will transfer the total to ${WISH_MONEY_NUMBER} via Wish Money.`
-        : `I will transfer via Wish Money to ${WISH_MONEY_NUMBER} once the price is confirmed.`
-    );
+    lines.push(`I will transfer the total to ${WISH_MONEY_NUMBER} via Wish Money.`);
   }
   return lines;
 };
@@ -43,21 +40,27 @@ export const buildArtworkOrderMessage = ({ reference, items, total, customer }) 
     "",
     ...customerLines(customer),
     "",
-    ...paymentLines(customer, true),
+    ...paymentLines(customer),
   ].join("\n");
 
-export const buildGypsumOrderMessage = ({ reference, piece, customer }) =>
+export const buildGypsumOrderMessage = ({ reference, piece, price, customer }) =>
   [
     "Hello Creative Detox! I'd like to order a custom gypsum piece.",
     `Order: ${reference}`,
     "",
     "*Gypsum Piece*",
     `Arabic text: ${piece.arabicText}`,
-    `Size: ${piece.size}`,
-    `Color: ${piece.color}`,
-    ...(piece.notes?.trim() ? [`Special requests: ${piece.notes.trim()}`] : []),
+    `Shape: ${shapeLabel(piece.shape)}`,
+    `Size: ${piece.size} (${sizeDimensions(piece.shape, piece.size)})`,
+    `Gold paper: ${piece.goldPaper ? "Yes" : "No"}`,
+    `Design: ${piece.design ? "Yes - I'll share my inspiration here" : "No"}`,
+    ...(piece.notes?.trim() ? [`Notes: ${piece.notes.trim()}`] : []),
+    "",
+    "*Price*",
+    ...price.lines.map((line) => `${line.label}: $${line.amount}`),
+    `*Total: $${price.total}*`,
     "",
     ...customerLines(customer),
     "",
-    ...paymentLines(customer, false),
+    ...paymentLines(customer),
   ].join("\n");

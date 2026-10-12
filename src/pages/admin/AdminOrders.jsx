@@ -30,6 +30,16 @@ export default function AdminOrders() {
     }
   };
 
+  const handleDelete = async (order) => {
+    if (!window.confirm(`Delete order from ${order.customer?.fullName || order.user?.name || "this customer"}? This can't be undone.`)) return;
+    try {
+      await api.delete(`/orders/${order._id}`);
+      setOrders((prev) => prev.filter((o) => o._id !== order._id));
+    } catch {
+      setError("Failed to delete order.");
+    }
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <h2 className="font-display text-2xl font-bold text-neutral-900">Artwork Orders</h2>
@@ -38,7 +48,7 @@ export default function AdminOrders() {
         {loading && <p className="text-center text-neutral-500 font-body py-10">Loading orders...</p>}
         {!loading && error && <p className="text-center text-berry font-body py-10">{error}</p>}
         {!loading && !error && (
-          <OrdersTable orders={orders} onStatusChange={handleStatusChange} />
+          <OrdersTable orders={orders} onStatusChange={handleStatusChange} onDelete={handleDelete} />
         )}
       </div>
     </div>

@@ -57,9 +57,7 @@ export default function OrderPlaced() {
                   Paying with Wish Money
                 </p>
                 <p className="font-body text-sm text-neutral-600">
-                  {isGypsum
-                    ? `We'll confirm the price on WhatsApp, then you can transfer it to ${WISH_MONEY_NUMBER}.`
-                    : `Please transfer $${state.total} to ${WISH_MONEY_NUMBER} via Wish Money.`}
+                  Please transfer ${state.total} to {WISH_MONEY_NUMBER} via Wish Money.
                 </p>
               </div>
             )}

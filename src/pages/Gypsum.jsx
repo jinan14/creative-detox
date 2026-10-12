@@ -3,10 +3,30 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
 import api from "../api/axios";
-import { FiType, FiMessageSquare, FiMaximize2, FiDroplet, FiX, FiArrowLeft } from "react-icons/fi";
+import {
+  FiType,
+  FiMessageSquare,
+  FiMaximize2,
+  FiChevronDown,
+  FiCheck,
+  FiFeather,
+  FiX,
+  FiArrowLeft,
+} from "react-icons/fi";
 import CustomerInfoForm from "../components/CustomerInfoForm";
 import { emptyCustomer, validateCustomer } from "../utils/customerInfo";
 import { buildWhatsAppUrl, buildGypsumOrderMessage, orderReference } from "../utils/whatsapp";
+import {
+  shapeOptions,
+  sizeOptions,
+  sizePrices,
+  sizeDimensions,
+  shapeLabel,
+  designAllowed,
+  priceBreakdown,
+  GOLD_PAPER_PRICE,
+  DESIGN_PRICE,
+} from "../utils/gypsumOptions";
 import gypsumSample1 from "../assets/gypsumSample1.jpg";
 import gypsumSample2 from "../assets/gypsumSample2.jpg";
 import gypsumSample3 from "../assets/gypsumSample3.jpg";
@@ -20,8 +40,44 @@ const sampleWork = [
 const inputClass =
   "w-full min-w-0 max-w-full px-4 py-3 rounded-2xl border border-neutral-200 bg-white font-body text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-teal/30 focus:border-teal transition-all duration-200";
 
-const sizeOptions = ["Small", "Medium", "Large"];
-const colorOptions = ["White", "Silver", "Gold", "Rose"];
+// Small outline previews for the shape picker.
+const shapePreviewClass = {
+  rectangle: "w-7 h-4 rounded-[3px]",
+  square: "w-5 h-5 rounded-[3px]",
+  circle: "w-5 h-5 rounded-full",
+};
+
+function OptionToggle({ selected, disabled, onClick, title, price, hint, children }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-pressed={selected}
+      className={`relative flex flex-col items-start text-left rounded-2xl border p-4 transition-all duration-200 ${
+        disabled
+          ? "border-neutral-200 bg-neutral-50 opacity-60 cursor-not-allowed"
+          : selected
+            ? "border-teal bg-white ring-2 ring-teal/30"
+            : "border-neutral-200 bg-white hover:border-teal/40"
+      }`}
+    >
+      <span
+        className={`absolute top-4 right-4 w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${
+          selected ? "bg-teal border-teal text-white" : "border-neutral-300 bg-white"
+        }`}
+      >
+        {selected && <FiCheck size={12} />}
+      </span>
+      <span className="flex items-center gap-2 font-display font-semibold text-neutral-900 pr-7">
+        {children}
+        {title}
+      </span>
+      <span className="block font-body text-xs text-teal font-semibold mt-1">+${price}</span>
+      <span className="block font-body text-xs text-neutral-500 mt-1">{hint}</span>
+    </button>
+  );
+}
 
 export default function Gypsum() {
   const { user } = useAuth();
@@ -30,8 +86,10 @@ export default function Gypsum() {
   const [form, setForm] = useState({
     arabicText: "",
     notes: "",
+    shape: "rectangle",
     size: "",
-    color: "",
+    goldPaper: false,
+    design: false,
   });
   const [errors, setErrors] = useState({});
   // Two steps: the piece itself, then the customer's delivery/contact info.
@@ -56,15 +114,22 @@ export default function Gypsum() {
     const e = {};
     if (!form.arabicText.trim()) e.arabicText = "Arabic name or word is required";
     if (!form.size) e.size = "Please select a size";
-    if (!form.color) e.color = "Please select a color";
     return e;
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+  const updateForm = (name, value) => {
+    setForm((prev) => {
+      const next = { ...prev, [name]: value };
+      // A design can't fit on a small piece, so drop it if the size shrinks.
+      if (!designAllowed(next.size)) next.design = false;
+      return next;
+    });
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
+
+  const handleChange = (e) => updateForm(e.target.name, e.target.value);
+
+  const price = priceBreakdown(form);
 
   const goToStep = (next) => {
     setStep(next);
@@ -105,11 +170,12 @@ export default function Gypsum() {
     try {
       const { data: order } = await api.post("/gypsum", { ...form, customer });
       const reference = orderReference("GY", order._id);
-      const message = buildGypsumOrderMessage({ reference, piece: form, customer });
+      const message = buildGypsumOrderMessage({ reference, piece: form, price, customer });
       navigate("/order-placed", {
         state: {
           kind: "gypsum",
           reference,
+          total: order.price,
           paymentMethod: customer.paymentMethod,
           whatsappUrl: buildWhatsAppUrl(message),
         },
@@ -244,14 +310,40 @@ export default function Gypsum() {
                 noValidate
                 className="flex flex-col gap-4 bg-cream/60 rounded-3xl p-8 shadow-card"
               >
-                <div className="bg-white rounded-2xl p-4 font-body text-sm text-neutral-600">
-                  <p className="font-display font-semibold text-neutral-900 mb-1">Your piece</p>
+                <div className="bg-white rounded-2xl p-5 font-body text-sm text-neutral-600">
+                  <div className="flex items-start justify-between gap-4 mb-3">
+                    <div>
+                      <p className="font-display font-semibold text-neutral-900">Your piece</p>
+                      <p dir="rtl" className="font-semibold text-teal text-lg text-left">
+                        {form.arabicText}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => goToStep("piece")}
+                      className="text-xs text-teal hover:text-berry transition-colors whitespace-nowrap"
+                    >
+                      Edit
+                    </button>
+                  </div>
                   <p>
-                    <span dir="rtl" className="font-semibold text-teal">{form.arabicText}</span>
-                    {" · "}
-                    {form.size} · {form.color}
+                    {shapeLabel(form.shape)} · {form.size} ({sizeDimensions(form.shape, form.size)})
                   </p>
-                  {form.notes.trim() && <p className="text-neutral-400 mt-1">{form.notes}</p>}
+                  {form.notes.trim() && (
+                    <p className="text-neutral-400 mt-1 break-words">“{form.notes.trim()}”</p>
+                  )}
+                  <div className="mt-3 pt-3 border-t border-neutral-100 flex flex-col gap-1">
+                    {price.lines.map((line) => (
+                      <div key={line.label} className="flex justify-between">
+                        <span>{line.label}</span>
+                        <span>${line.amount}</span>
+                      </div>
+                    ))}
+                    <div className="flex justify-between font-display font-bold text-teal text-base mt-1">
+                      <span>Total</span>
+                      <span>${price.total}</span>
+                    </div>
+                  </div>
                 </div>
 
                 <CustomerInfoForm
@@ -289,15 +381,21 @@ export default function Gypsum() {
                 className="flex flex-col gap-4 bg-cream/60 rounded-3xl p-8 shadow-card"
               >
                 <div>
+                  <label className="block font-body text-sm font-medium text-neutral-700 mb-2">
+                    Arabic Name or Word
+                  </label>
                   <div className="relative">
-                    <FiType size={15} className="absolute left-3.5 top-3.5 text-neutral-400" />
+                    <FiType
+                      size={15}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none"
+                    />
                     <input
                       name="arabicText"
                       value={form.arabicText}
                       onChange={handleChange}
-                      placeholder="Arabic Name or Word"
+                      placeholder="اكتب الاسم أو الكلمة"
                       dir="rtl"
-                      className={`${inputClass} pl-10`}
+                      className={`${inputClass} pr-10`}
                     />
                   </div>
                   {errors.arabicText && (
@@ -305,58 +403,149 @@ export default function Gypsum() {
                   )}
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <div className="relative">
-                      <FiMaximize2 size={15} className="absolute left-3.5 top-3.5 text-neutral-400" />
-                      <select
-                        name="size"
-                        value={form.size}
-                        onChange={handleChange}
-                        className={`${inputClass} pl-10`}
-                      >
-                        <option value="">Select Size</option>
-                        {sizeOptions.map((s) => (
-                          <option key={s} value={s}>
-                            {s}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    {errors.size && <p className="mt-1 text-xs text-berry font-body">{errors.size}</p>}
-                  </div>
-
-                  <div>
-                    <div className="relative">
-                      <FiDroplet size={15} className="absolute left-3.5 top-3.5 text-neutral-400" />
-                      <select
-                        name="color"
-                        value={form.color}
-                        onChange={handleChange}
-                        className={`${inputClass} pl-10`}
-                      >
-                        <option value="">Select Color</option>
-                        {colorOptions.map((c) => (
-                          <option key={c} value={c}>
-                            {c}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    {errors.color && <p className="mt-1 text-xs text-berry font-body">{errors.color}</p>}
+                <div>
+                  <span className="block font-body text-sm font-medium text-neutral-700 mb-2">
+                    Shape
+                  </span>
+                  <div className="grid grid-cols-3 gap-3">
+                    {shapeOptions.map((option) => {
+                      const selected = form.shape === option.value;
+                      return (
+                        <button
+                          key={option.value}
+                          type="button"
+                          onClick={() => updateForm("shape", option.value)}
+                          aria-pressed={selected}
+                          className={`flex flex-col items-center gap-2 rounded-2xl border py-3 px-2 font-body text-sm transition-all duration-200 ${
+                            selected
+                              ? "border-teal bg-white ring-2 ring-teal/30 text-teal font-semibold"
+                              : "border-neutral-200 bg-white text-neutral-600 hover:border-teal/40"
+                          }`}
+                        >
+                          <span className="h-5 flex items-center">
+                            <span
+                              className={`block border-2 ${selected ? "border-teal" : "border-neutral-400"} ${shapePreviewClass[option.value]}`}
+                            />
+                          </span>
+                          {option.label}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
-                <div className="relative">
-                  <FiMessageSquare size={15} className="absolute left-3.5 top-3.5 text-neutral-400" />
-                  <textarea
-                    name="notes"
-                    value={form.notes}
-                    onChange={handleChange}
-                    placeholder="Any notes or special requests? (optional)"
-                    rows={4}
-                    className={`${inputClass} pl-10 resize-none`}
-                  />
+                <div>
+                  <label
+                    htmlFor="gypsum-size"
+                    className="block font-body text-sm font-medium text-neutral-700 mb-2"
+                  >
+                    Size
+                  </label>
+                  <div className="relative">
+                    <FiMaximize2
+                      size={15}
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none"
+                    />
+                    <select
+                      id="gypsum-size"
+                      name="size"
+                      value={form.size}
+                      onChange={handleChange}
+                      className={`${inputClass} appearance-none pl-10 pr-10 cursor-pointer`}
+                    >
+                      <option value="">Select Size</option>
+                      {sizeOptions.map((size) => (
+                        <option key={size} value={size}>
+                          {size} — {sizeDimensions(form.shape, size)} · ${sizePrices[size]}
+                        </option>
+                      ))}
+                    </select>
+                    <FiChevronDown
+                      size={16}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-neutral-400 pointer-events-none"
+                    />
+                  </div>
+                  {errors.size && <p className="mt-1 text-xs text-berry font-body">{errors.size}</p>}
+                </div>
+
+                <div>
+                  <span className="block font-body text-sm font-medium text-neutral-700 mb-2">
+                    Extras
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <OptionToggle
+                      selected={form.goldPaper}
+                      onClick={() => updateForm("goldPaper", !form.goldPaper)}
+                      title="Gold Paper"
+                      price={GOLD_PAPER_PRICE}
+                      hint="Gold leaf finish on the lettering."
+                    >
+                      <span className="w-4 h-4 rounded-full bg-gradient-to-br from-yellow-300 to-amber-600" />
+                    </OptionToggle>
+                    <OptionToggle
+                      selected={form.design}
+                      disabled={!designAllowed(form.size)}
+                      onClick={() => updateForm("design", !form.design)}
+                      title="Design"
+                      price={DESIGN_PRICE}
+                      hint={
+                        designAllowed(form.size)
+                          ? "Describe it in the notes or send us an inspiration on WhatsApp."
+                          : "Not available for small pieces — choose Medium or Large."
+                      }
+                    >
+                      <FiFeather size={15} className="text-teal" />
+                    </OptionToggle>
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="gypsum-notes"
+                    className="block font-body text-sm font-medium text-neutral-700 mb-2"
+                  >
+                    Notes <span className="font-normal text-neutral-400">(optional)</span>
+                  </label>
+                  <div className="relative">
+                    <FiMessageSquare
+                      size={15}
+                      className="absolute left-3.5 top-3.5 text-neutral-400 pointer-events-none"
+                    />
+                    <textarea
+                      id="gypsum-notes"
+                      name="notes"
+                      value={form.notes}
+                      onChange={handleChange}
+                      placeholder={
+                        form.design
+                          ? "Describe the design you'd like, or tell us you'll send an inspiration on WhatsApp."
+                          : "Any special requests?"
+                      }
+                      rows={4}
+                      className={`${inputClass} pl-10 resize-none`}
+                    />
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-4 font-body text-sm text-neutral-600">
+                  {form.size ? (
+                    <div className="flex flex-col gap-1">
+                      {price.lines.map((line) => (
+                        <div key={line.label} className="flex justify-between">
+                          <span>{line.label}</span>
+                          <span>${line.amount}</span>
+                        </div>
+                      ))}
+                      <div className="flex justify-between font-display font-bold text-teal text-lg pt-2 mt-1 border-t border-neutral-100">
+                        <span>Total</span>
+                        <span>${price.total}</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-center text-neutral-400">
+                      Select a size to see the price — from ${sizePrices.Small}.
+                    </p>
+                  )}
                 </div>
 
                 <button

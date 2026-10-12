@@ -1,5 +1,6 @@
 import Registration from '../models/Registration.js';
 import Workshop from '../models/Workshop.js';
+import { logAdminAction } from '../utils/adminLog.js';
 
 export const createRegistration = async (req, res) => {
   try {
@@ -48,5 +49,31 @@ export const getRegistrations = async (req, res) => {
     res.json(registrations);
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch registrations', error: err.message });
+  }
+};
+
+export const deleteRegistration = async (req, res) => {
+  try {
+    const registration = await Registration.findByIdAndDelete(req.params.id).populate('workshop', 'title');
+    if (!registration) {
+      return res.status(404).json({ message: 'Registration not found' });
+    }
+
+    // Give the seat back so someone else can register.
+    if (registration.workshop) {
+      await Workshop.updateOne({ _id: registration.workshop._id }, { $inc: { seatsRemaining: 1 } });
+    }
+
+    await logAdminAction({
+      adminId: req.user.id,
+      action: 'delete',
+      entityType: 'Registration',
+      entityId: registration._id,
+      description: `Deleted registration for "${registration.workshop?.title || 'a workshop'}"`,
+    });
+
+    res.json({ message: 'Registration deleted' });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to delete registration', error: err.message });
   }
 };

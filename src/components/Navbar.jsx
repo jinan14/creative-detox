@@ -99,60 +99,84 @@ export default function Navbar() {
             ))}
           </ul>
 
-          {/* CTA */}
-          <div className="hidden lg:flex items-center gap-3.5 whitespace-nowrap">
-            {user ? (
-              <>
-                {user.role === "admin" && (
-                  <Link
-                    to="/admin"
-                    className="rounded-full bg-berry px-4 py-1.5 font-body text-xs font-semibold text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-berry/90"
-                  >
-                    Admin
-                  </Link>
-                )}
-                <Link to="/cart" className="relative nav-link" aria-label="Cart">
-                  <FiShoppingBag size={17} />
-                  {count > 0 && (
-                    <span className="absolute -top-2 -right-2.5 flex items-center justify-center w-4 h-4 rounded-full bg-berry text-white text-[10px] font-body font-semibold">
-                      {count}
-                    </span>
+          <div className="flex items-center gap-2 lg:gap-4">
+            {/* CTA */}
+            <div className="hidden lg:flex items-center gap-3.5 whitespace-nowrap">
+              {user ? (
+                <>
+                  {user.role === "admin" && (
+                    <Link
+                      to="/admin"
+                      className="rounded-full bg-berry px-4 py-1.5 font-body text-xs font-semibold text-white shadow-soft transition-all duration-300 hover:-translate-y-0.5 hover:bg-berry/90"
+                    >
+                      Admin
+                    </Link>
                   )}
-                </Link>
-                <span
-                  title={user.name}
-                  className="flex items-center gap-1.5 text-sm text-neutral-700 font-body max-w-[7rem] truncate"
-                >
-                  <FiUser size={15} className="text-teal shrink-0" />
-                  {user.name?.split(" ")[0]}
-                </span>
-                <button onClick={handleLogout} className="nav-link">
-                  Logout
-                </button>
-              </>
-            ) : (
-              <>
-                <Link to="/login" className="nav-link">
-                  Login
-                </Link>
-                <Link to="/register" className="nav-link">
-                  Register
-                </Link>
-              </>
-            )}
-            <Link to="/workshops" className="btn-primary text-xs px-5 py-2.5">
-              Book a Workshop
-            </Link>
-          </div>
+                  <span
+                    title={user.name}
+                    className="flex items-center gap-1.5 text-sm text-neutral-700 font-body max-w-[7rem] truncate"
+                  >
+                    <FiUser size={15} className="text-teal shrink-0" />
+                    {user.name?.split(" ")[0]}
+                  </span>
+                  <button onClick={handleLogout} className="nav-link">
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" className="nav-link">
+                    Login
+                  </Link>
+                  <Link to="/register" className="nav-link">
+                    Register
+                  </Link>
+                </>
+              )}
+              <Link to="/workshops" className="btn-primary text-xs px-5 py-2.5">
+                Book a Workshop
+              </Link>
+            </div>
 
-          {/* Mobile Hamburger */}
-          <button
-            onClick={toggleMobileMenu}
-            className="lg:hidden text-teal p-2 rounded-xl hover:bg-berry/10 hover:text-berry transition-colors"
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? <HiX size={22} /> : <HiMenuAlt3 size={22} />}
-          </button>
+            {/* Cart — always visible, on every screen size */}
+            <Link
+              to="/cart"
+              onClick={closeMobileMenu}
+              aria-label={count > 0 ? `Cart, ${count} item${count === 1 ? "" : "s"}` : "Cart"}
+              className={`group relative flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 hover:-translate-y-0.5 ${
+                location.pathname === "/cart"
+                  ? "bg-berry text-white border border-berry shadow-soft"
+                  : "bg-white text-teal border border-teal/15 shadow-soft hover:bg-berry hover:text-white hover:border-berry"
+              }`}
+            >
+              <FiShoppingBag size={18} />
+              <AnimatePresence>
+                {count > 0 && (
+                  <motion.span
+                    key={count}
+                    initial={{ scale: 0.4, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.4, opacity: 0 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 18 }}
+                    className={`absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full text-white text-[10px] font-body font-semibold ring-2 ring-white transition-colors duration-300 ${
+                      location.pathname === "/cart" ? "bg-teal" : "bg-berry group-hover:bg-teal"
+                    }`}
+                  >
+                    {count > 9 ? "9+" : count}
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </Link>
+
+            {/* Mobile Hamburger */}
+            <button
+              onClick={toggleMobileMenu}
+              className="lg:hidden text-teal p-2 rounded-xl hover:bg-berry/10 hover:text-berry transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileOpen ? <HiX size={22} /> : <HiMenuAlt3 size={22} />}
+            </button>
+          </div>
         </div>
       </motion.nav>
 
@@ -197,14 +221,6 @@ export default function Navbar() {
                     <FiUser size={16} className="text-teal shrink-0" />
                     {user.name?.split(" ")[0]}
                   </span>
-                  <Link
-                    to="/cart"
-                    onClick={closeMobileMenu}
-                    className="flex items-center gap-2 font-body text-neutral-700 hover:text-teal transition-colors"
-                  >
-                    <FiShoppingBag size={16} />
-                    Cart{count > 0 ? ` (${count})` : ""}
-                  </Link>
                   {user.role === "admin" && (
                     <Link
                       to="/admin"

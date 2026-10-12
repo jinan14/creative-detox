@@ -1,3 +1,5 @@
+import { FiTrash2 } from "react-icons/fi";
+
 const formatDate = (date) => {
   if (!date) return "—";
   const parsed = new Date(date);
@@ -5,7 +7,7 @@ const formatDate = (date) => {
   return parsed.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 };
 
-export default function RegistrationsTable({ registrations }) {
+export default function RegistrationsTable({ registrations, onDelete }) {
   if (registrations.length === 0) {
     return (
       <p className="text-center text-neutral-500 font-body py-10">
@@ -22,7 +24,8 @@ export default function RegistrationsTable({ registrations }) {
             <th className="pb-3 pr-4">Participant</th>
             <th className="pb-3 pr-4">Email</th>
             <th className="pb-3 pr-4">Workshop</th>
-            <th className="pb-3">Registered On</th>
+            <th className="pb-3 pr-4">Registered On</th>
+            <th className="pb-3 text-right">Actions</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-100">
@@ -33,8 +36,19 @@ export default function RegistrationsTable({ registrations }) {
               </td>
               <td className="py-3 pr-4 text-neutral-500">{registration.user?.email || "—"}</td>
               <td className="py-3 pr-4 text-neutral-500">{registration.workshop?.title || "—"}</td>
-              <td className="py-3 text-neutral-500 whitespace-nowrap">
+              <td className="py-3 pr-4 text-neutral-500 whitespace-nowrap">
                 {formatDate(registration.registeredAt)}
+              </td>
+              <td className="py-3">
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => onDelete(registration)}
+                    className="p-2 text-neutral-400 hover:text-berry transition-colors"
+                    title="Delete"
+                  >
+                    <FiTrash2 size={16} />
+                  </button>
+                </div>
               </td>
             </tr>
           ))}
