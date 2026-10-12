@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FiImage, FiCalendar, FiUsers, FiBox, FiShoppingBag, FiArrowRight } from "react-icons/fi";
+import { FiImage, FiCalendar, FiUsers, FiBox, FiShoppingBag, FiMessageCircle, FiArrowRight } from "react-icons/fi";
 import api from "../../api/axios";
 
 export default function AdminOverview() {
@@ -11,6 +11,7 @@ export default function AdminOverview() {
     registrations: null,
     orders: null,
     gypsum: null,
+    messages: null,
   });
 
   useEffect(() => {
@@ -22,8 +23,9 @@ export default function AdminOverview() {
       api.get("/registrations"),
       api.get("/orders"),
       api.get("/gypsum"),
+      api.get("/inquiries", { params: { status: "new" } }),
     ])
-      .then(([artworksRes, workshopsRes, registrationsRes, ordersRes, gypsumRes]) => {
+      .then(([artworksRes, workshopsRes, registrationsRes, ordersRes, gypsumRes, messagesRes]) => {
         if (cancelled) return;
         setCounts({
           artworks: artworksRes.data.length,
@@ -31,6 +33,7 @@ export default function AdminOverview() {
           registrations: registrationsRes.data.length,
           orders: ordersRes.data.length,
           gypsum: gypsumRes.data.length,
+          messages: messagesRes.data.length,
         });
       })
       .catch(() => {});
@@ -70,6 +73,12 @@ export default function AdminOverview() {
       count: counts.gypsum,
       to: "/admin/gypsum",
       icon: FiBox,
+    },
+    {
+      label: "New Messages",
+      count: counts.messages,
+      to: "/admin/messages",
+      icon: FiMessageCircle,
     },
   ];
 

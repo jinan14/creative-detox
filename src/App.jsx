@@ -26,6 +26,7 @@ import AdminWorkshops from './pages/admin/AdminWorkshops'
 import AdminRegistrations from './pages/admin/AdminRegistrations'
 import AdminGypsum from './pages/admin/AdminGypsum'
 import AdminOrders from './pages/admin/AdminOrders'
+import AdminInquiries from './pages/admin/AdminInquiries'
 import AdminActivityLog from './pages/admin/AdminActivityLog'
 
 function ScrollToTop() {
@@ -88,6 +89,7 @@ function App() {
               <Route path="registrations" element={<AdminRegistrations />} />
               <Route path="orders" element={<AdminOrders />} />
               <Route path="gypsum" element={<AdminGypsum />} />
+              <Route path="messages" element={<AdminInquiries />} />
               <Route path="activity" element={<AdminActivityLog />} />
             </Route>
           </Routes>

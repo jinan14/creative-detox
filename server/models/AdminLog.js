@@ -10,7 +10,7 @@ const adminLogSchema = new Schema({
   },
   entityType: {
     type: String,
-    enum: ["Artwork", "Workshop", "Order", "GypsumOrder", "Registration"],
+    enum: ["Artwork", "Workshop", "Order", "GypsumOrder", "Registration", "Inquiry"],
     required: true,
   },
 

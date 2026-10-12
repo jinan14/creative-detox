@@ -12,6 +12,7 @@ import gypsumRoutes from './routes/gypsum.routes.js';
 import uploadRoutes from './routes/upload.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import aiRoutes from './routes/ai.routes.js';
+import inquiryRoutes from './routes/inquiry.routes.js';
 
 dotenv.config();
 
@@ -58,6 +59,7 @@ app.use('/api/gypsum', gypsumRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/inquiries', inquiryRoutes);
 
 const PORT = process.env.PORT || 5050;
 

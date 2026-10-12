@@ -1,11 +1,14 @@
 import { paymentLabel, WISH_MONEY_NUMBER } from "./customerInfo";
 import { shapeLabel, sizeDimensions } from "./gypsumOptions";
+import { topicInfo, isBookingTopic } from "./inquiryTopics";
 
 // Digits only, international format, no "+" — that's what wa.me expects.
 const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || "96176190801";
 
 export const buildWhatsAppUrl = (message) =>
-  `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  message
+    ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+    : `https://wa.me/${WHATSAPP_NUMBER}`;
 
 // Short human-friendly reference derived from the Mongo id, so the admin can
 // match a WhatsApp message to the order in the dashboard.
@@ -64,3 +67,25 @@ export const buildGypsumOrderMessage = ({ reference, piece, price, customer }) =
     "",
     ...paymentLines(customer),
   ].join("\n");
+
+// "2026-12-05" -> "December 5, 2026" (parsed as a local date, not UTC).
+const formatDay = (value) => {
+  const [y, m, d] = value.split("-").map(Number);
+  if (!y || !m || !d) return value;
+  return new Date(y, m - 1, d).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+};
+
+export const buildInquiryMessage = (inquiry) => {
+  const topic = topicInfo(inquiry.topic);
+  const booking = isBookingTopic(inquiry.topic);
+  return [
+    `Hello Creative Detox! ${topic ? `${topic.emoji} ` : ""}${topic?.label || "I have a question"}`,
+    "",
+    `Name: ${inquiry.name}`,
+    `Phone: ${inquiry.phone}`,
+    ...(inquiry.email?.trim() ? [`Email: ${inquiry.email.trim()}`] : []),
+    ...(booking && inquiry.preferredDate ? [`Preferred date: ${formatDay(inquiry.preferredDate)}`] : []),
+    ...(booking && inquiry.groupSize ? [`Number of people: ${inquiry.groupSize}`] : []),
+    ...(inquiry.message?.trim() ? ["", inquiry.message.trim()] : []),
+  ].join("\n");
+};
