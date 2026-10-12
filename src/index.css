@@ -12,6 +12,8 @@
 
   --font-display: Georgia, "Times New Roman", serif;
   --font-body: Inter, ui-sans-serif, system-ui, sans-serif;
+  --font-hand: "Caveat", cursive;
+  --font-arabic: "Amiri", serif;
 
   --shadow-soft: 0 18px 45px rgb(31 111 107 / 0.14);
   --shadow-card: 0 16px 35px rgb(15 23 42 / 0.12);
@@ -57,4 +59,31 @@
   .nav-link {
     @apply font-body text-sm font-medium text-neutral-700 transition-colors hover:text-teal;
   }
+}
+
+/* Landing page: infinite word band (content is rendered twice, so -50% loops seamlessly). */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+}
+
+/* Subtle paper grain laid over painted backgrounds. */
+.paper-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.3 0 0 0 0 0.25 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.35;
+  mix-blend-mode: multiply;
 }

@@ -7,6 +7,14 @@ import WorkshopCard from "../components/WorkshopCard";
 import ArtworkCard from "../components/ArtworkCard";
 import TestimonialCard from "../components/TestimonialCard";
 import CTASection from "../components/CTASection";
+import HeroGallery from "../components/home/HeroGallery";
+import HeroPaint from "../components/home/HeroPaint";
+import HeroSwitch from "../components/home/HeroSwitch";
+import WordMarquee from "../components/home/WordMarquee";
+import BrushReveal from "../components/home/BrushReveal";
+import BrushUnderline from "../components/home/BrushUnderline";
+import CalligraphyBadge from "../components/home/CalligraphyBadge";
+import StatsSection from "../components/home/StatsSection";
 import api from "../api/axios";
 import { participantImages, workshopImages } from "../data/images";
 import gypsumSample1 from "../assets/gypsumSample1.jpg";
@@ -89,15 +97,30 @@ const testimonials = [
   },
 ];
 
-const stats = [
-  { number: "50+", label: "Workshops" },
-  { number: "300+", label: "Participants" },
-  { number: "1000+", label: "Art Sessions" },
-  { number: "200+", label: "Community Members" },
-];
+// TEMPORARY hero comparison: ?hero=paint|gallery, remembered per browser.
+const HERO_KEY = "heroVariant";
+const readHeroVariant = () => {
+  const fromUrl = new URLSearchParams(window.location.search).get("hero");
+  if (fromUrl === "gallery" || fromUrl === "paint") return fromUrl;
+  try {
+    return localStorage.getItem(HERO_KEY) === "paint" ? "paint" : "gallery";
+  } catch {
+    return "gallery";
+  }
+};
 
 export default function Home() {
   const [artworks, setArtworks] = useState([]);
+  const [heroVariant, setHeroVariant] = useState(readHeroVariant);
+
+  const changeHeroVariant = (variant) => {
+    setHeroVariant(variant);
+    try {
+      localStorage.setItem(HERO_KEY, variant);
+    } catch {
+      // Private mode etc. — the switch still works for this visit.
+    }
+  };
 
   useEffect(() => {
     let cancelled = false;
@@ -105,7 +128,7 @@ export default function Home() {
     api
       .get("/artworks")
       .then(({ data }) => {
-        if (!cancelled) setArtworks(data.slice(0, 3));
+        if (!cancelled) setArtworks(data.slice(0, 5));
       })
       .catch(() => {});
 
@@ -116,58 +139,9 @@ export default function Home() {
 
   return (
     <main className="overflow-hidden">
-      {/* Hero Section */}
-      <section className="min-h-screen bg-cream flex items-center pt-28 pb-20">
-        <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left Content */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-          >
-            <p className="text-berry font-medium mb-5">
-              Art For Your Mental Escape
-            </p>
+      {heroVariant === "paint" ? <HeroPaint /> : <HeroGallery artworks={artworks} />}
 
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight text-teal mb-6">
-              Creativity That Heals & Inspires
-            </h1>
-
-            <p className="text-lg text-neutral-600 leading-relaxed max-w-xl mb-8">
-              Creative Detox is a safe artistic space where creativity,
-              mindfulness, and self-expression come together through inspiring
-              workshops and community experiences.
-            </p>
-
-            {/* Buttons */}
-            <div className="flex flex-wrap gap-4">
-              <Link to="/workshops" className="btn-primary">
-                Explore Workshops
-              </Link>
-
-              <Link to="/contact" className="btn-secondary">
-                Join Now
-              </Link>
-            </div>
-          </motion.div>
-
-          {/* Right Image */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.7 }}
-            className="relative"
-          >
-            <div className="absolute -top-6 -left-6 w-40 h-40 bg-berry/20 rounded-full blur-3xl"></div>
-
-            <img
-              src={workshopImages.heroWorkshop}
-              alt="People painting together in a creative workshop"
-              className="rounded-[2rem] shadow-soft relative z-10 w-full h-[600px] object-cover"
-            />
-          </motion.div>
-        </div>
-      </section>
+      <WordMarquee />
 
       {/* Featured Workshops */}
       <section className="py-20 bg-white">
@@ -254,7 +228,7 @@ export default function Home() {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {artworks.map((artwork, index) => (
+              {artworks.slice(0, 3).map((artwork, index) => (
                 <ArtworkCard key={artwork._id} artwork={artwork} index={index} />
               ))}
             </div>
@@ -271,20 +245,17 @@ export default function Home() {
       {/* Custom Gypsum Carving */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="relative"
-          >
+          <div className="relative pb-10 lg:pb-0">
             <div className="absolute -bottom-6 -right-6 w-40 h-40 bg-teal/20 rounded-full blur-3xl" />
-            <img
-              src={gypsumSample1}
-              alt="A custom hand-carved gypsum piece with Arabic calligraphy"
-              className="rounded-[2rem] shadow-soft relative z-10 w-full h-[420px] object-cover"
-            />
-          </motion.div>
+            <BrushReveal className="relative z-10">
+              <img
+                src={gypsumSample1}
+                alt="A custom hand-carved gypsum piece with Arabic calligraphy"
+                className="rounded-[2rem] shadow-soft w-full h-[420px] object-cover"
+              />
+            </BrushReveal>
+            <CalligraphyBadge className="absolute z-20 -bottom-2 left-4 lg:-bottom-10" />
+          </div>
 
           <motion.div
             initial={{ opacity: 0, x: 40 }}
@@ -300,9 +271,9 @@ export default function Home() {
 
             <p className="text-neutral-600 leading-relaxed mb-8 max-w-xl">
               Order a hand-carved gypsum piece featuring your name or a word
-              of your choosing in Arabic calligraphy, made to your preferred
-              size and color — a personal, lasting piece of art for your
-              space.
+              of your choosing in Arabic calligraphy, in the shape and size
+              you prefer, with optional gold paper — a personal, lasting piece
+              of art for your space.
             </p>
 
             <Link to="/gypsum" className="btn-primary">
@@ -359,55 +330,42 @@ export default function Home() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-14">
-            <p className="text-berry font-medium mb-3">
-              Testimonials
-            </p>
+      <section className="relative py-24 bg-white overflow-hidden">
+        {/* Dotted sketchbook paper */}
+        <div
+          aria-hidden
+          className="absolute inset-0 opacity-60 [background-image:radial-gradient(var(--color-teal-light)_1px,transparent_1px)] [background-size:22px_22px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_75%)]"
+        />
+        <div className="relative max-w-7xl mx-auto px-6">
+          <div className="text-center mb-20">
+            <p className="text-berry font-medium mb-3">Testimonials</p>
 
             <h2 className="text-4xl md:text-5xl font-display font-bold text-teal mb-4">
-              What Our Community Says
+              What Our <BrushUnderline>Community</BrushUnderline> Says
             </h2>
 
             <p className="text-neutral-600 max-w-2xl mx-auto leading-relaxed">
               Hear from participants who experienced creativity, connection,
               and mindfulness through our workshops.
             </p>
+            <p className="font-hand text-2xl text-sage mt-4 rotate-[-2deg]">
+              little notes left on our wall ↓
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-10">
             {testimonials.map((testimonial, index) => (
-              <TestimonialCard key={index} {...testimonial} />
+              <TestimonialCard key={index} index={index} {...testimonial} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Statistics */}
-      <section className="py-20 bg-teal text-white">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 text-center">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ scale: 1.05 }}
-              >
-                <h3 className="text-5xl font-bold mb-3">
-                  {stat.number}
-                </h3>
-
-                <p className="text-white/80 text-lg">
-                  {stat.label}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <StatsSection />
 
       {/* CTA Section */}
       <CTASection />
+      <HeroSwitch value={heroVariant} onChange={changeHeroVariant} />
     </main>
   );
 }
