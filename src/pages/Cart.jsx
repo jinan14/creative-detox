@@ -1,15 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { FiTrash2, FiCheck, FiShoppingBag } from "react-icons/fi";
+import { motion } from "framer-motion";
+import { FiTrash2, FiShoppingBag } from "react-icons/fi";
 import { useCart } from "../context/CartContext";
 import { resolveThumbnailUrl, fallbackToFullImage } from "../utils/resolveImageUrl";
 
 export default function Cart() {
-  const { items, loading, total, removeItem, checkout } = useCart();
+  const { items, loading, total, removeItem } = useCart();
   const [removingId, setRemovingId] = useState(null);
-  const [checkingOut, setCheckingOut] = useState(false);
-  const [placed, setPlaced] = useState(false);
 
   const handleRemove = async (artworkId) => {
     setRemovingId(artworkId);
@@ -17,16 +15,6 @@ export default function Cart() {
       await removeItem(artworkId);
     } finally {
       setRemovingId(null);
-    }
-  };
-
-  const handleCheckout = async () => {
-    setCheckingOut(true);
-    try {
-      await checkout();
-      setPlaced(true);
-    } finally {
-      setCheckingOut(false);
     }
   };
 
@@ -113,51 +101,16 @@ export default function Cart() {
                 <span className="font-display text-2xl font-bold text-teal">${total}</span>
               </div>
 
-              <button
-                onClick={handleCheckout}
-                disabled={checkingOut}
-                className="btn-primary justify-center w-full py-4 text-sm mt-6 disabled:opacity-60"
+              <Link
+                to="/checkout"
+                className="btn-primary justify-center w-full py-4 text-sm mt-6"
               >
-                {checkingOut ? "Placing Order..." : "Checkout"}
-              </button>
+                Checkout
+              </Link>
             </motion.div>
           )}
         </div>
       </section>
-
-      <AnimatePresence>
-        {placed && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center px-6"
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 30, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.95 }}
-              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-card"
-            >
-              <div className="mx-auto mb-4 w-14 h-14 rounded-full bg-sage/10 flex items-center justify-center">
-                <FiCheck size={26} className="text-sage-dark" />
-              </div>
-              <h2 className="font-display text-2xl font-bold text-teal mb-2">Order Placed!</h2>
-              <p className="font-body text-sm text-neutral-500 mb-6">
-                Thank you for your purchase. Your cart has been cleared.
-              </p>
-              <Link
-                to="/gallery"
-                onClick={() => setPlaced(false)}
-                className="btn-primary justify-center w-full py-3 text-sm"
-              >
-                Continue Browsing
-              </Link>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </main>
   );
 }

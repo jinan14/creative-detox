@@ -1,3 +1,5 @@
+import CustomerCell from "./CustomerCell";
+
 const statusOptions = [
   { value: "pending", label: "Pending" },
   { value: "in_production", label: "In Production" },
@@ -43,8 +45,7 @@ export default function GypsumOrdersTable({ orders, onStatusChange }) {
           {orders.map((order) => (
             <tr key={order._id} className="font-body text-sm text-neutral-700 align-top">
               <td className="py-3 pr-4">
-                <span className="font-medium text-neutral-900">{order.user?.name || "—"}</span>
-                <div className="text-xs text-neutral-400">{order.user?.email}</div>
+                <CustomerCell customer={order.customer} user={order.user} />
               </td>
               <td className="py-3 pr-4 max-w-[160px] text-neutral-700">{order.arabicText}</td>
               <td className="py-3 pr-4 max-w-[200px] text-neutral-500">{order.notes || "—"}</td>

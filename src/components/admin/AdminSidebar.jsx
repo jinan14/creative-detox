@@ -1,11 +1,12 @@
 import { NavLink } from "react-router-dom";
-import { FiGrid, FiImage, FiCalendar, FiUsers, FiBox, FiClock } from "react-icons/fi";
+import { FiGrid, FiImage, FiCalendar, FiUsers, FiBox, FiClock, FiShoppingBag } from "react-icons/fi";
 
 const links = [
   { label: "Overview", to: "/admin", end: true, icon: FiGrid },
   { label: "Artworks", to: "/admin/artworks", icon: FiImage },
   { label: "Workshops", to: "/admin/workshops", icon: FiCalendar },
   { label: "Registrations", to: "/admin/registrations", icon: FiUsers },
+  { label: "Artwork Orders", to: "/admin/orders", icon: FiShoppingBag },
   { label: "Gypsum Orders", to: "/admin/gypsum", icon: FiBox },
   { label: "Activity Log", to: "/admin/activity", icon: FiClock },
 ];

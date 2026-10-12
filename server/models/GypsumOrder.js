@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import customerSchema from './customerSchema.js';
 
 const gypsumOrderSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
@@ -6,6 +7,7 @@ const gypsumOrderSchema = new mongoose.Schema({
   notes: { type: String },
   size: { type: String, required: true },
   color: { type: String, required: true },
+  customer: { type: customerSchema },
   status: { type: String, enum: ['pending', 'in_production', 'completed'], default: 'pending' },
   createdAt: { type: Date, default: Date.now },
 });

@@ -15,6 +15,8 @@ import Contact from './pages/Contact'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Cart from './pages/Cart'
+import Checkout from './pages/Checkout'
+import OrderPlaced from './pages/OrderPlaced'
 import Gypsum from './pages/Gypsum'
 import Recommend from './pages/Recommend'
 import AdminDashboard from './pages/admin/AdminDashboard'
@@ -23,6 +25,7 @@ import AdminArtworks from './pages/admin/AdminArtworks'
 import AdminWorkshops from './pages/admin/AdminWorkshops'
 import AdminRegistrations from './pages/admin/AdminRegistrations'
 import AdminGypsum from './pages/admin/AdminGypsum'
+import AdminOrders from './pages/admin/AdminOrders'
 import AdminActivityLog from './pages/admin/AdminActivityLog'
 
 function ScrollToTop() {
@@ -63,6 +66,15 @@ function App() {
               }
             />
             <Route
+              path="/checkout"
+              element={
+                <ProtectedRoute>
+                  <Checkout />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/order-placed" element={<OrderPlaced />} />
+            <Route
               path="/admin"
               element={
                 <ProtectedRoute adminOnly>
@@ -74,6 +86,7 @@ function App() {
               <Route path="artworks" element={<AdminArtworks />} />
               <Route path="workshops" element={<AdminWorkshops />} />
               <Route path="registrations" element={<AdminRegistrations />} />
+              <Route path="orders" element={<AdminOrders />} />
               <Route path="gypsum" element={<AdminGypsum />} />
               <Route path="activity" element={<AdminActivityLog />} />
             </Route>

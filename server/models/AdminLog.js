@@ -10,13 +10,13 @@ const adminLogSchema = new Schema({
   },
   entityType: {
     type: String,
-    enum: ["Artwork", "Workshop", "GypsumOrder", "Registration"],
+    enum: ["Artwork", "Workshop", "Order", "GypsumOrder", "Registration"],
     required: true,
   },
 
   // Polymorphic reference: refPath tells Mongoose to look at the
   // entityType field on THIS document to decide which collection
-  // entityId points into. The enum values above ("Artwork", "Workshop",
+  // entityId points into. The enum values above ("Artwork", "Workshop", "Order",
   // "GypsumOrder", "Registration") must exactly match the model names
   // registered in mongoose.model(...) for those collections.
 

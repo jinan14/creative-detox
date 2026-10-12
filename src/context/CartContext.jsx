@@ -47,17 +47,18 @@ export function CartProvider({ children }) {
     setItems(data.items || []);
   };
 
-  const checkout = async () => {
-    await api.post("/orders");
-    await api.delete("/cart");
+  // The server empties the cart when it saves the order.
+  const placeOrder = async (customer) => {
+    const { data } = await api.post("/orders", { customer });
     setItems([]);
+    return data;
   };
 
   const total = items.reduce((sum, item) => sum + item.price, 0);
 
   return (
     <CartContext.Provider
-      value={{ items, loading, count: items.length, total, addItem, removeItem, checkout }}
+      value={{ items, loading, count: items.length, total, addItem, removeItem, placeOrder }}
     >
       {children}
     </CartContext.Provider>

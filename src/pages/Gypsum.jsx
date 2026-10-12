@@ -1,9 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
 import api from "../api/axios";
-import { FiCheck, FiType, FiMessageSquare, FiMaximize2, FiDroplet, FiX } from "react-icons/fi";
+import { FiType, FiMessageSquare, FiMaximize2, FiDroplet, FiX, FiArrowLeft } from "react-icons/fi";
+import CustomerInfoForm from "../components/CustomerInfoForm";
+import { emptyCustomer, validateCustomer } from "../utils/customerInfo";
+import { buildWhatsAppUrl, buildGypsumOrderMessage, orderReference } from "../utils/whatsapp";
 import gypsumSample1 from "../assets/gypsumSample1.jpg";
 import gypsumSample2 from "../assets/gypsumSample2.jpg";
 import gypsumSample3 from "../assets/gypsumSample3.jpg";
@@ -31,8 +34,13 @@ export default function Gypsum() {
     color: "",
   });
   const [errors, setErrors] = useState({});
+  // Two steps: the piece itself, then the customer's delivery/contact info.
+  const [step, setStep] = useState("piece");
+  const [customer, setCustomer] = useState(() => emptyCustomer(user));
+  const [customerErrors, setCustomerErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const formRef = useRef(null);
   const [previewImage, setPreviewImage] = useState(null);
 
   useEffect(() => {
@@ -58,7 +66,12 @@ export default function Gypsum() {
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleSubmit = async (e) => {
+  const goToStep = (next) => {
+    setStep(next);
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const handlePieceSubmit = (e) => {
     e.preventDefault();
     const errs = validate();
     if (Object.keys(errs).length > 0) {
@@ -71,16 +84,38 @@ export default function Gypsum() {
       return;
     }
 
+    goToStep("customer");
+  };
+
+  const handleCustomerChange = (name, value) => {
+    setCustomer((prev) => ({ ...prev, [name]: value }));
+    if (customerErrors[name]) setCustomerErrors((prev) => ({ ...prev, [name]: "" }));
+  };
+
+  const handleOrderSubmit = async (e) => {
+    e.preventDefault();
+    const errs = validateCustomer(customer);
+    if (Object.keys(errs).length > 0) {
+      setCustomerErrors(errs);
+      return;
+    }
+
     setSubmitting(true);
+    setSubmitError("");
     try {
-      await api.post("/gypsum", form);
-      setSubmitted(true);
-      setForm({ arabicText: "", notes: "", size: "", color: "" });
-    } catch (err) {
-      setErrors({
-        arabicText: err.response?.data?.message || "Something went wrong. Please try again.",
+      const { data: order } = await api.post("/gypsum", { ...form, customer });
+      const reference = orderReference("GY", order._id);
+      const message = buildGypsumOrderMessage({ reference, piece: form, customer });
+      navigate("/order-placed", {
+        state: {
+          kind: "gypsum",
+          reference,
+          paymentMethod: customer.paymentMethod,
+          whatsappUrl: buildWhatsAppUrl(message),
+        },
       });
-    } finally {
+    } catch (err) {
+      setSubmitError(err.response?.data?.message || "Something went wrong. Please try again.");
       setSubmitting(false);
     }
   };
@@ -173,119 +208,165 @@ export default function Gypsum() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="relative"
+            className="relative scroll-mt-28"
+            ref={formRef}
           >
-            <AnimatePresence>
-              {submitted && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  className="absolute inset-0 z-10 bg-white rounded-3xl flex flex-col items-center justify-center text-center p-10 shadow-card"
-                >
-                  <div className="w-16 h-16 bg-teal/10 rounded-full flex items-center justify-center mb-5">
-                    <FiCheck size={28} className="text-teal" />
+            <div className="flex items-center justify-center gap-3 mb-6 font-body text-sm">
+              {["Your Piece", "Your Details"].map((label, i) => {
+                const active = (step === "piece" ? 0 : 1) === i;
+                return (
+                  <div key={label} className="flex items-center gap-3">
+                    {i > 0 && <span className="w-8 h-px bg-neutral-300" />}
+                    <span
+                      className={`flex items-center gap-2 ${active ? "text-teal font-semibold" : "text-neutral-400"}`}
+                    >
+                      <span
+                        className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+                          active ? "bg-teal text-white" : "bg-neutral-200 text-neutral-500"
+                        }`}
+                      >
+                        {i + 1}
+                      </span>
+                      {label}
+                    </span>
                   </div>
-                  <h3 className="font-display text-2xl font-semibold text-neutral-900 mb-2">
-                    Order Received!
-                  </h3>
-                  <p className="font-body text-sm text-neutral-500 mb-6 max-w-xs">
-                    Your custom gypsum request has been saved. Our team will
-                    reach out with production details soon.
-                  </p>
-                  <button
-                    onClick={() => setSubmitted(false)}
-                    className="btn-primary text-sm"
-                  >
-                    Submit Another Order
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                );
+              })}
+            </div>
 
-            <form
-              onSubmit={handleSubmit}
-              className="flex flex-col gap-4 bg-cream/60 rounded-3xl p-8 shadow-card"
-            >
-              <div>
+            {step === "customer" ? (
+              <motion.form
+                key="customer"
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.35 }}
+                onSubmit={handleOrderSubmit}
+                noValidate
+                className="flex flex-col gap-4 bg-cream/60 rounded-3xl p-8 shadow-card"
+              >
+                <div className="bg-white rounded-2xl p-4 font-body text-sm text-neutral-600">
+                  <p className="font-display font-semibold text-neutral-900 mb-1">Your piece</p>
+                  <p>
+                    <span dir="rtl" className="font-semibold text-teal">{form.arabicText}</span>
+                    {" · "}
+                    {form.size} · {form.color}
+                  </p>
+                  {form.notes.trim() && <p className="text-neutral-400 mt-1">{form.notes}</p>}
+                </div>
+
+                <CustomerInfoForm
+                  value={customer}
+                  errors={customerErrors}
+                  onChange={handleCustomerChange}
+                />
+
+                {submitError && <p className="text-sm text-berry font-body">{submitError}</p>}
+
+                <div className="flex flex-col-reverse sm:flex-row gap-3 mt-1">
+                  <button
+                    type="button"
+                    onClick={() => goToStep("piece")}
+                    disabled={submitting}
+                    className="btn-secondary justify-center py-4 text-sm disabled:opacity-60"
+                  >
+                    <FiArrowLeft size={14} /> Back
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="btn-primary justify-center flex-1 py-4 text-sm disabled:opacity-60"
+                  >
+                    {submitting ? "Placing Order..." : "Complete Order"}
+                  </button>
+                </div>
+                <p className="font-body text-xs text-neutral-400 text-center">
+                  You'll be taken to WhatsApp to send us your order details.
+                </p>
+              </motion.form>
+            ) : (
+              <form
+                onSubmit={handlePieceSubmit}
+                className="flex flex-col gap-4 bg-cream/60 rounded-3xl p-8 shadow-card"
+              >
+                <div>
+                  <div className="relative">
+                    <FiType size={15} className="absolute left-3.5 top-3.5 text-neutral-400" />
+                    <input
+                      name="arabicText"
+                      value={form.arabicText}
+                      onChange={handleChange}
+                      placeholder="Arabic Name or Word"
+                      dir="rtl"
+                      className={`${inputClass} pl-10`}
+                    />
+                  </div>
+                  {errors.arabicText && (
+                    <p className="mt-1 text-xs text-berry font-body">{errors.arabicText}</p>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <div className="relative">
+                      <FiMaximize2 size={15} className="absolute left-3.5 top-3.5 text-neutral-400" />
+                      <select
+                        name="size"
+                        value={form.size}
+                        onChange={handleChange}
+                        className={`${inputClass} pl-10`}
+                      >
+                        <option value="">Select Size</option>
+                        {sizeOptions.map((s) => (
+                          <option key={s} value={s}>
+                            {s}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    {errors.size && <p className="mt-1 text-xs text-berry font-body">{errors.size}</p>}
+                  </div>
+
+                  <div>
+                    <div className="relative">
+                      <FiDroplet size={15} className="absolute left-3.5 top-3.5 text-neutral-400" />
+                      <select
+                        name="color"
+                        value={form.color}
+                        onChange={handleChange}
+                        className={`${inputClass} pl-10`}
+                      >
+                        <option value="">Select Color</option>
+                        {colorOptions.map((c) => (
+                          <option key={c} value={c}>
+                            {c}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    {errors.color && <p className="mt-1 text-xs text-berry font-body">{errors.color}</p>}
+                  </div>
+                </div>
+
                 <div className="relative">
-                  <FiType size={15} className="absolute left-3.5 top-3.5 text-neutral-400" />
-                  <input
-                    name="arabicText"
-                    value={form.arabicText}
+                  <FiMessageSquare size={15} className="absolute left-3.5 top-3.5 text-neutral-400" />
+                  <textarea
+                    name="notes"
+                    value={form.notes}
                     onChange={handleChange}
-                    placeholder="Arabic Name or Word"
-                    dir="rtl"
-                    className={`${inputClass} pl-10`}
+                    placeholder="Any notes or special requests? (optional)"
+                    rows={4}
+                    className={`${inputClass} pl-10 resize-none`}
                   />
                 </div>
-                {errors.arabicText && (
-                  <p className="mt-1 text-xs text-berry font-body">{errors.arabicText}</p>
-                )}
-              </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <div className="relative">
-                    <FiMaximize2 size={15} className="absolute left-3.5 top-3.5 text-neutral-400" />
-                    <select
-                      name="size"
-                      value={form.size}
-                      onChange={handleChange}
-                      className={`${inputClass} pl-10`}
-                    >
-                      <option value="">Select Size</option>
-                      {sizeOptions.map((s) => (
-                        <option key={s} value={s}>
-                          {s}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  {errors.size && <p className="mt-1 text-xs text-berry font-body">{errors.size}</p>}
-                </div>
-
-                <div>
-                  <div className="relative">
-                    <FiDroplet size={15} className="absolute left-3.5 top-3.5 text-neutral-400" />
-                    <select
-                      name="color"
-                      value={form.color}
-                      onChange={handleChange}
-                      className={`${inputClass} pl-10`}
-                    >
-                      <option value="">Select Color</option>
-                      {colorOptions.map((c) => (
-                        <option key={c} value={c}>
-                          {c}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  {errors.color && <p className="mt-1 text-xs text-berry font-body">{errors.color}</p>}
-                </div>
-              </div>
-
-              <div className="relative">
-                <FiMessageSquare size={15} className="absolute left-3.5 top-3.5 text-neutral-400" />
-                <textarea
-                  name="notes"
-                  value={form.notes}
-                  onChange={handleChange}
-                  placeholder="Any notes or special requests? (optional)"
-                  rows={4}
-                  className={`${inputClass} pl-10 resize-none`}
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={submitting}
-                className="btn-primary justify-center py-4 text-sm mt-1 disabled:opacity-60"
-              >
-                {submitting ? "Submitting..." : user ? "Submit Order" : "Log In to Submit"}
-              </button>
-            </form>
+                <button
+                  type="submit"
+                  className="btn-primary justify-center py-4 text-sm mt-1"
+                >
+                  {user ? "Continue" : "Log In to Order"}
+                </button>
+              </form>
+            )}
           </motion.div>
         </div>
       </section>

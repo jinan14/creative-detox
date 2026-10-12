@@ -1,5 +1,6 @@
 import GypsumOrder from '../models/GypsumOrder.js';
 import { logAdminAction } from '../utils/adminLog.js';
+import { validateCustomer, pickCustomer } from '../utils/validateCustomer.js';
 
 export const createGypsumOrder = async (req, res) => {
   try {
@@ -8,12 +9,18 @@ export const createGypsumOrder = async (req, res) => {
       return res.status(400).json({ message: 'arabicText, size, and color are required' });
     }
 
+    const customerError = validateCustomer(req.body.customer);
+    if (customerError) {
+      return res.status(400).json({ message: customerError });
+    }
+
     const order = await GypsumOrder.create({
       user: req.user.id,
       arabicText,
       notes,
       size,
       color,
+      customer: pickCustomer(req.body.customer),
     });
 
     res.status(201).json(order);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FiImage, FiCalendar, FiUsers, FiBox, FiArrowRight } from "react-icons/fi";
+import { FiImage, FiCalendar, FiUsers, FiBox, FiShoppingBag, FiArrowRight } from "react-icons/fi";
 import api from "../../api/axios";
 
 export default function AdminOverview() {
@@ -9,6 +9,7 @@ export default function AdminOverview() {
     artworks: null,
     workshops: null,
     registrations: null,
+    orders: null,
     gypsum: null,
   });
 
@@ -19,14 +20,16 @@ export default function AdminOverview() {
       api.get("/artworks"),
       api.get("/workshops"),
       api.get("/registrations"),
+      api.get("/orders"),
       api.get("/gypsum"),
     ])
-      .then(([artworksRes, workshopsRes, registrationsRes, gypsumRes]) => {
+      .then(([artworksRes, workshopsRes, registrationsRes, ordersRes, gypsumRes]) => {
         if (cancelled) return;
         setCounts({
           artworks: artworksRes.data.length,
           workshops: workshopsRes.data.length,
           registrations: registrationsRes.data.length,
+          orders: ordersRes.data.length,
           gypsum: gypsumRes.data.length,
         });
       })
@@ -55,6 +58,12 @@ export default function AdminOverview() {
       count: counts.registrations,
       to: "/admin/registrations",
       icon: FiUsers,
+    },
+    {
+      label: "Artwork Orders",
+      count: counts.orders,
+      to: "/admin/orders",
+      icon: FiShoppingBag,
     },
     {
       label: "Gypsum Orders",
