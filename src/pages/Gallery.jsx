@@ -20,6 +20,26 @@ const behindScenes = [
   },
 ];
 
+// Placeholder matching ArtworkCard's layout, shown while /artworks loads so
+// the grid appears immediately instead of a lone "Loading..." line.
+function ArtworkCardSkeleton() {
+  return (
+    <div className="flex flex-col bg-white rounded-3xl overflow-hidden shadow-soft animate-pulse">
+      <div className="h-96 bg-cream" />
+      <div className="px-6 pt-6 pb-6">
+        <div className="h-5 w-2/3 rounded-full bg-neutral-100 mb-3" />
+        <div className="h-3 w-1/3 rounded-full bg-neutral-100 mb-5" />
+        <div className="h-3 w-full rounded-full bg-neutral-100 mb-2" />
+        <div className="h-3 w-5/6 rounded-full bg-neutral-100 mb-6" />
+        <div className="flex items-center justify-between">
+          <div className="h-5 w-12 rounded-full bg-teal/10" />
+          <div className="h-10 w-28 rounded-full bg-teal/10" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Gallery() {
   const [artworks, setArtworks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -98,7 +118,15 @@ export default function Gallery() {
           </div>
 
           {loading && (
-            <p className="text-center text-neutral-500 font-body">Loading artworks...</p>
+            <div
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+              aria-busy="true"
+              aria-label="Loading artworks"
+            >
+              {Array.from({ length: 6 }, (_, i) => (
+                <ArtworkCardSkeleton key={i} />
+              ))}
+            </div>
           )}
 
           {!loading && error && (
@@ -114,7 +142,12 @@ export default function Gallery() {
           {!loading && !error && artworks.length > 0 && (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {artworks.map((artwork, index) => (
-                <ArtworkCard key={artwork._id} artwork={artwork} index={index} />
+                <ArtworkCard
+                  key={artwork._id}
+                  artwork={artwork}
+                  index={index}
+                  priority={index < 3}
+                />
               ))}
             </div>
           )}

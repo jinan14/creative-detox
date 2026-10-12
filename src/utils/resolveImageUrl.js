@@ -20,3 +20,29 @@ export default function resolveImageUrl(path) {
   if (path.startsWith("/uploads/")) return `${API_ORIGIN}${path}`;
   return path;
 }
+
+/**
+ * Card-sized WebP thumbnail for an uploaded image, generated server-side on
+ * upload into uploads/thumbs/ (see server/utils/thumbnail.js):
+ *   "/uploads/123-abc.jpeg" -> "<origin>/uploads/thumbs/123-abc.webp"
+ * Non-upload images (absolute URLs, bundled assets) have no thumbnail and
+ * resolve to the full image. Pair with an onError fallback to
+ * resolveImageUrl(path) in case a thumbnail is missing.
+ */
+export function resolveThumbnailUrl(path) {
+  if (!path || !path.startsWith("/uploads/")) return resolveImageUrl(path);
+  const filename = path.slice("/uploads/".length).replace(/\.[^.]+$/, ".webp");
+  return `${API_ORIGIN}/uploads/thumbs/${filename}`;
+}
+
+/**
+ * onError handler for <img src={resolveThumbnailUrl(path)}>: swaps in the
+ * full image once if the thumbnail is missing (e.g. an upload from before
+ * thumbnails existed that hasn't been migrated yet).
+ */
+export function fallbackToFullImage(path) {
+  return (e) => {
+    const full = resolveImageUrl(path);
+    if (e.currentTarget.src !== full) e.currentTarget.src = full;
+  };
+}

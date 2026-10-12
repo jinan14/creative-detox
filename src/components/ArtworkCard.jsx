@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { FiCheck } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
-import resolveImageUrl from "../utils/resolveImageUrl";
+import { resolveThumbnailUrl, fallbackToFullImage } from "../utils/resolveImageUrl";
 
 const categoryColors = {
   Painting: "bg-teal/10 text-teal",
@@ -15,7 +15,7 @@ const categoryColors = {
   Vitray: "bg-berry/10 text-berry",
 };
 
-export default function ArtworkCard({ artwork, index = 0 }) {
+export default function ArtworkCard({ artwork, index = 0, priority = false }) {
   const [added, setAdded] = useState(false);
   const [adding, setAdding] = useState(false);
   const { user } = useAuth();
@@ -53,8 +53,12 @@ export default function ArtworkCard({ artwork, index = 0 }) {
         {/* Image */}
         <div className="relative overflow-hidden h-96 bg-cream">
           <img
-            src={resolveImageUrl(image)}
+            src={resolveThumbnailUrl(image)}
+            onError={fallbackToFullImage(image)}
             alt={title}
+            loading={priority ? "eager" : "lazy"}
+            fetchPriority={priority ? "high" : "auto"}
+            decoding="async"
             className="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

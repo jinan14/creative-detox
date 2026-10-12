@@ -1,5 +1,5 @@
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
-import resolveImageUrl from "../../utils/resolveImageUrl";
+import { resolveThumbnailUrl, fallbackToFullImage } from "../../utils/resolveImageUrl";
 
 const formatDate = (date) => {
   if (!date) return "—";
@@ -37,7 +37,8 @@ export default function WorkshopTable({ workshops, onEdit, onDelete }) {
                 <div className="flex items-center gap-3">
                   {workshop.image ? (
                     <img
-                      src={resolveImageUrl(workshop.image)}
+                      src={resolveThumbnailUrl(workshop.image)}
+                      onError={fallbackToFullImage(workshop.image)}
                       alt={workshop.title}
                       className="w-12 h-12 rounded-xl object-cover flex-shrink-0"
                     />

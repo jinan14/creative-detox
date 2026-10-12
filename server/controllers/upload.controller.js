@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import convert from 'heic-convert';
+import { createThumbnail, THUMBNAILABLE_EXT_RE } from '../utils/thumbnail.js';
 
 const HEIC_EXT_RE = /\.hei[cf]$/i;
 
@@ -28,6 +29,16 @@ export const uploadImage = async (req, res) => {
       filename = jpegFilename;
     } catch (err) {
       return res.status(400).json({ message: `Failed to convert HEIC image: ${err.message}` });
+    }
+  }
+
+  // Card-sized WebP for gallery/listing pages. Non-fatal: if it fails, the
+  // frontend falls back to the full image when the thumbnail 404s.
+  if (THUMBNAILABLE_EXT_RE.test(filename)) {
+    try {
+      await createThumbnail(path.join(path.dirname(filePath), filename));
+    } catch (err) {
+      console.error(`Thumbnail generation failed for ${filename}: ${err.message}`);
     }
   }
 

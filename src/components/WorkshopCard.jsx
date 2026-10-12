@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { FiClock, FiCalendar, FiArrowRight } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import resolveImageUrl from "../utils/resolveImageUrl";
+import { resolveThumbnailUrl, fallbackToFullImage } from "../utils/resolveImageUrl";
 
 const categoryColors = {
   Painting: "bg-teal/10 text-teal",
@@ -50,8 +50,11 @@ export default function WorkshopCard({ workshop, index = 0, ...props }) {
       {/* Image */}
       <div className="relative overflow-hidden h-52">
         <img
-          src={resolveImageUrl(image)}
+          src={resolveThumbnailUrl(image)}
+          onError={fallbackToFullImage(image)}
           alt={title}
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

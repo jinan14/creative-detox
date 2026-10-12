@@ -30,7 +30,9 @@ app.use(
   })
 );
 app.use(express.json());
-app.use('/uploads', express.static('uploads'));
+// Upload filenames are unique (timestamp + random hash) and never overwritten,
+// so browsers can cache them indefinitely — a replaced image gets a new URL.
+app.use('/uploads', express.static('uploads', { maxAge: '1y', immutable: true }));
 
 app.use((req, res, next) => {
   console.log(`[req] ${req.method} ${req.originalUrl} | origin=${req.headers.origin ?? '(none)'}`);

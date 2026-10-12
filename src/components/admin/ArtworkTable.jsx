@@ -1,5 +1,5 @@
 import { FiEdit2, FiTrash2, FiCheckCircle, FiXCircle, FiChevronUp, FiChevronDown } from "react-icons/fi";
-import resolveImageUrl from "../../utils/resolveImageUrl";
+import { resolveThumbnailUrl, fallbackToFullImage } from "../../utils/resolveImageUrl";
 
 export default function ArtworkTable({ artworks, onEdit, onDelete, onToggleAvailable, onMove }) {
   if (artworks.length === 0) {
@@ -47,7 +47,8 @@ export default function ArtworkTable({ artworks, onEdit, onDelete, onToggleAvail
                     </button>
                   </div>
                   <img
-                    src={resolveImageUrl(artwork.image)}
+                    src={resolveThumbnailUrl(artwork.image)}
+                    onError={fallbackToFullImage(artwork.image)}
                     alt={artwork.title}
                     className="w-12 h-12 rounded-xl object-cover flex-shrink-0"
                   />
