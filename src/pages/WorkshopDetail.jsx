@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiArrowLeft, FiClock, FiCalendar, FiMapPin, FiUsers } from "react-icons/fi";
 import api from "../api/axios";
+import ServerWakeNotice from "../components/ServerWakeNotice";
 import RegistrationForm from "../components/RegistrationForm";
 import resolveImageUrl from "../utils/resolveImageUrl";
 
@@ -68,6 +69,7 @@ export default function WorkshopDetail() {
           </Link>
 
           {loading && <p className="text-center text-neutral-500 font-body py-20">Loading workshop...</p>}
+          <ServerWakeNotice loading={loading} />
 
           {!loading && error && <p className="text-center text-berry font-body py-20">{error}</p>}
 

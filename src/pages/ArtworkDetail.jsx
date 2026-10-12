@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiArrowLeft, FiCheck } from "react-icons/fi";
 import api from "../api/axios";
+import ServerWakeNotice from "../components/ServerWakeNotice";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import resolveImageUrl from "../utils/resolveImageUrl";
@@ -80,6 +81,7 @@ export default function ArtworkDetail() {
           </Link>
 
           {loading && <p className="text-center text-neutral-500 font-body py-20">Loading artwork...</p>}
+          <ServerWakeNotice loading={loading} />
 
           {!loading && error && <p className="text-center text-berry font-body py-20">{error}</p>}
 

@@ -34,16 +34,18 @@ app.use(express.json());
 // so browsers can cache them indefinitely — a replaced image gets a new URL.
 app.use('/uploads', express.static('uploads', { maxAge: '1y', immutable: true }));
 
+// Registered before the request logger so uptime-monitor pings (every few
+// minutes, to keep Render's free tier awake) don't flood the logs.
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
 app.use((req, res, next) => {
   console.log(`[req] ${req.method} ${req.originalUrl} | origin=${req.headers.origin ?? '(none)'}`);
   res.on('finish', () => {
     console.log(`[res] ${req.method} ${req.originalUrl} -> ${res.statusCode}`);
   });
   next();
-});
-
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok' });
 });
 
 app.use('/api/auth', authRoutes);

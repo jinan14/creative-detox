@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import WorkshopCard from "../components/WorkshopCard";
 import RegistrationForm from "../components/RegistrationForm";
 import api from "../api/axios";
+import ServerWakeNotice from "../components/ServerWakeNotice";
 
 export default function Workshops() {
   const [workshops, setWorkshops] = useState([]);
@@ -102,6 +103,7 @@ export default function Workshops() {
           {loading && (
             <p className="text-center text-neutral-500 font-body">Loading workshops...</p>
           )}
+          <ServerWakeNotice loading={loading} />
 
           {!loading && error && (
             <p className="text-center text-berry font-body">{error}</p>

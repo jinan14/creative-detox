@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 
 import ArtworkCard from "../components/ArtworkCard";
 import api from "../api/axios";
+import ServerWakeNotice from "../components/ServerWakeNotice";
 import { workshopImages } from "../data/images";
 
 const behindScenes = [
@@ -128,6 +129,7 @@ export default function Gallery() {
               ))}
             </div>
           )}
+          <ServerWakeNotice loading={loading} />
 
           {!loading && error && (
             <p className="text-center text-berry font-body">{error}</p>
